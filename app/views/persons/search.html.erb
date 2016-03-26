@@ -1,0 +1,50 @@
+<%= form_tag search_path, method: :get do %>
+    <p>
+      <%= text_field_tag :query, params[:query] %>
+      <%= label_tag :query %>
+    </p>
+    <p>
+      <%= text_field_tag :passed_to, params[:passed_to] %>
+      <%= label_tag :passed_to %>
+    </p>
+    <p>
+      <%= select_tag :industry, options_from_collection_for_select(Industry.all.order(:name), 'id', 'name', params[:industry]), include_blank: true %>
+      <%= label_tag :industry %>
+    </p>
+    <p>
+      <%= select_tag :owner, options_from_collection_for_select(User.all.order(:dir), 'dir', 'dir', params[:owner]), include_blank: true %>
+      <%= label_tag :owner %>
+    </p>
+    <p><%= submit_tag 'Search' %></p>
+<% end %>
+<p>
+  <%= "#{@size || 0} results found." %>
+  <%= link_to '(Export)', export_path(params: params, format: :csv) %>
+</p>
+<p>
+  <%= @status %>
+</p>
+<table>
+  <thead>
+  <th>Name</th>
+  <th>Position</th>
+  <th>Industry</th>
+  <th>Owner</th>
+  <th>Passed to</th>
+  <th>Email</th>
+  <th>More</th>
+  </thead>
+  <tbody>
+  <% @people.each do |person| %>
+      <tr>
+        <td><%= person.name %></td>
+        <td><%= person.position %></td>
+        <td><%= person.industry %></td>
+        <td><%= person.owner %></td>
+        <td><%= person.passed_to %></td>
+        <td><%= person.email %></td>
+        <td><%= person.notes.gsub(/{.*}/, '') if person.notes.present? %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

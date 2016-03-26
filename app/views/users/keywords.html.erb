@@ -1,0 +1,49 @@
+<h1><%= @user.dir %></h1>
+<p><b>Next key:</b></p>
+<% if @next_key.nil? %>
+    <p><b>No more keys left</b></p>
+<% else %>
+    <table>
+      <thead>
+      <th>Position</th>
+      <th>Keyword</th>
+      <th>Industry</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td><b><%= @next_key.position %></b></td>
+        <td><b><%= @next_key.keyword %></b></td>
+        <td><b><%= @industries.key(@next_key.industry.to_i) %></b></td>
+        <td><b><%= @next_key.passed %></b></td>
+      </tr>
+      </tbody>
+    </table>
+<% end %>
+
+
+<p><b><%= @user.get_next_url(false)%></b></p>
+<p><b>All keys</b></p>
+<p><%= link_to 'Reset all keywords', reset_keywords_user_path(@user) %></p>
+<p><%= link_to 'Multiply keywords', multiply_keywords_user_path(@user) %></p>
+<table>
+  <thead>
+  <th>Position</th>
+  <th>Keyword</th>
+  <th>Industry</th>
+  <th>Passed?</th>
+  </thead>
+
+  <tbody>
+  <% @keywords.each do |k| %>
+      <tr>
+        <td><%= k.position %></td>
+        <td><%= k.keyword %></td>
+        <td><%= @industries.key(k.industry.to_i) %></td>
+        <td id="<%= k.id %>"><%= k.passed %></td>
+        <td><%= link_to 'Revert', revert_user_keyword_path(@user, k)%></td>
+          <!--, remote: true, onclick: "document.getElementById('#{k.id}').textContent = '#{!k.passed?}';" %></td>-->
+      </tr>
+  <% end %>
+  </tbody>
+
+</table>
