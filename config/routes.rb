@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
 
-  resources :persons, as: :trendom, only: [:index] do
+  resources :people, as: :people, only: [:index] do
     collection do
-      get 'find'
+      post 'find'
+      post 'download'
       get 'search'
       get 'count'
     end

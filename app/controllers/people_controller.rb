@@ -1,8 +1,15 @@
-class PersonsController < ApplicationController
+class PeopleController < ApplicationController
+  skip_before_filter :verify_authenticity_token, only: [:find, :download]
+
   def find
+    logger.warn params
     respond_to do |format|
-      format.json { render json: Person.get(person_params) }
+      format.json { render json: Person.get_emails(person_params) }
     end
+  end
+
+  def download
+
   end
 
   def count
@@ -18,6 +25,6 @@ class PersonsController < ApplicationController
 
   private
   def person_params
-    params.permit(:name, :linkedin_id, :position, :location, :industry, :email)
+    params.permit!#(:name, :linkedin_id, :position, :location, :industry, :email)
   end
 end

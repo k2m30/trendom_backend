@@ -30,6 +30,7 @@ gem 'puma'
 gem 'piplapis-ruby'
 gem 'fullcontact'
 gem 'tail'
+# gem 'doorkeeper'
 
 group :development do
   gem 'better_errors'
