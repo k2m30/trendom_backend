@@ -2,9 +2,9 @@ require 'pipl'
 
 class PiplDb
   def self.find(person_hash)
-    result = {}
-    result[:emails] = ['mikhail.chuprynski@gmail.com', '1m@tut.by'].join(',')
-    return result
+    # result = {}
+    # result[:emails] = ['mikhail.chuprynski@gmail.com', '1m@tut.by'].join(',')
+    # return result
 
     first, last = extract person_hash[:name]
     person = Pipl::Person.new
@@ -14,7 +14,7 @@ class PiplDb
     response = Pipl::client.search person: person, match_requirements: 'email'.freeze, api_key: 'BUSINESS-effn6ozaifex6jkmxzcenj0i'.freeze
 
     if response.person.nil?
-      return nil
+      return {emails: '', notes: nil}
     end
     emails = response.person.emails.map(&:address).join(',')
     result = {}
