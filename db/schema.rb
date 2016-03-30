@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160328192514) do
+ActiveRecord::Schema.define(version: 20160330111258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "people", force: true do |t|
+  create_table "profiles", force: true do |t|
     t.string   "name"
     t.string   "position"
     t.string   "industry"
@@ -29,31 +29,35 @@ ActiveRecord::Schema.define(version: 20160328192514) do
     t.integer  "linkedin_id"
     t.integer  "twitter_id"
     t.integer  "facebook_id"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "people_users", id: false, force: true do |t|
-    t.integer "user_id"
-    t.integer "people_id"
-  end
-
-  add_index "people_users", ["people_id"], name: "index_people_users_on_people_id", using: :btree
-  add_index "people_users", ["user_id"], name: "index_people_users_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "oauth"
-    t.string   "email"
+    t.string   "email",                default: "",  null: false
+    t.string   "encrypted_password",   default: "",  null: false
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",        default: 0,   null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
     t.string   "name"
-    t.string   "plan"
+    t.string   "image"
+    t.string   "uid"
+    t.string   "plan",                 default: ""
     t.datetime "subscription_expires"
-    t.string   "calls_left"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "encrypted_password",   default: "", null: false
+    t.string   "calls_left",           default: "0"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+
+  create_table "users_profiles", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "profile_id"
+  end
+
+  add_index "users_profiles", ["profile_id"], name: "index_users_profiles_on_profile_id", using: :btree
+  add_index "users_profiles", ["user_id"], name: "index_users_profiles_on_user_id", using: :btree
 
 end

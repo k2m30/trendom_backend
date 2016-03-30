@@ -1,14 +1,6 @@
 Rails.application.routes.draw do
 
-  get 'welcome/index'
-
-  namespace :users do
-  get 'oauth_callback_controller/google_oauth2'
-  end
-
-  devise_for :users, :controllers => { :omniauth_callbacks => 'users/oauth_callback'}
-
-  resources :people, as: :people, only: [:index] do
+  resources :profiles do
     collection do
       post 'find'
       post 'download'
@@ -17,7 +9,13 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'welcome/index'
 
+  namespace :users do
+    get 'oauth_callback_controller/google_oauth2'
+  end
+
+  devise_for :users, :controllers => {:omniauth_callbacks => 'users/oauth_callback'}
 
   root 'welcome#index'
   mount Tail::Engine, at: '/tail'
