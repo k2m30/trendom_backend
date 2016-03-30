@@ -1,0 +1,28 @@
+%h1
+  = current_user.name
+%p
+  = current_user.email
+
+
+%table.table
+  %tbody
+    - current_user.profiles.each do |p|
+      %tr
+        %td
+          =p.emails_available
+        %td
+          =p.name
+        %td
+          =p.position
+        %td
+          =p.location
+        %td
+          =p.email
+        %td
+          =p.notes
+        %td
+          =p.linkedin_url
+        %td
+          =p.twitter_url
+        %td
+          =p.facebook_url

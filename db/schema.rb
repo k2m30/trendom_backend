@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20160330111258) do
   create_table "profiles", force: true do |t|
     t.string   "name"
     t.string   "position"
-    t.string   "industry"
+    t.string   "photo"
     t.string   "location"
     t.string   "email"
     t.text     "notes"
@@ -29,9 +29,18 @@ ActiveRecord::Schema.define(version: 20160330111258) do
     t.integer  "linkedin_id"
     t.integer  "twitter_id"
     t.integer  "facebook_id"
+    t.integer  "emails_available"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "profiles_users", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "profile_id"
+  end
+
+  add_index "profiles_users", ["profile_id"], name: "index_profiles_users_on_profile_id", using: :btree
+  add_index "profiles_users", ["user_id"], name: "index_profiles_users_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                default: "",  null: false
@@ -51,13 +60,5 @@ ActiveRecord::Schema.define(version: 20160330111258) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-
-  create_table "users_profiles", id: false, force: true do |t|
-    t.integer "user_id"
-    t.integer "profile_id"
-  end
-
-  add_index "users_profiles", ["profile_id"], name: "index_users_profiles_on_profile_id", using: :btree
-  add_index "users_profiles", ["user_id"], name: "index_users_profiles_on_user_id", using: :btree
 
 end
