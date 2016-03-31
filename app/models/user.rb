@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  def self.create_with_uid_and_email(uid, email)
+  def self.create_with_uid_and_email(uid: , email: )
     User.create(email: email,
                 password: Devise.friendly_token[0, 20],
                 uid: uid)
