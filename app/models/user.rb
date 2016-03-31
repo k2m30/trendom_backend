@@ -33,8 +33,6 @@ class User < ActiveRecord::Base
     data = access_token.info
     user = User.find_by(email: data[:email])
 
-    user.update_with_omniauth(access_token) if user.image.nil?
-
     unless user
       user = User.create(name: data[:name],
                          email: data[:email],
@@ -42,6 +40,7 @@ class User < ActiveRecord::Base
                          image: data[:image],
                          uid: access_token[:uid])
     end
+    user.update_with_omniauth(access_token) if user.image.nil?
     user
   end
 
