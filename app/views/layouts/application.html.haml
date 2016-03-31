@@ -8,9 +8,17 @@
     = csrf_meta_tags
   %body
     %nav
-      - if user_signed_in?
-        %ul
-          =link_to 'Sign out', destroy_user_session_path, method: :delete
+    %nav.navbar.navbar-default
+      .container-fluid
+        -#.navbar-header
+        -#  %a.navbar-brand{:href => "#"}
+        -#    %img{alt: 'Trendom.io', :src => "..."}/
+        - if user_signed_in?
+          %ul.nav.navbar-nav.navbar-right
+            %li
+              =link_to destroy_user_session_path, method: :delete do
+                = fa_icon 'sign-out'
+                Sign out
 
     .container-fluid
       = yield

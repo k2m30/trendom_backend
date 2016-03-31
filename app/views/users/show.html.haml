@@ -1,28 +1,75 @@
 %h1
   = current_user.name
-%p
-  = current_user.email
 
+.row
+  .col-md-2
+    %img{src: current_user.image, width: '100px'}
+  .col-md-10
+    .row
+      .col-md-4
+        Email:
+      .col-md-8
+        %p
+          = current_user.email
+    .row
+      .col-md-4
+        Prospects left:
+      .col-md-8
+        %p
+          = current_user.calls_left
+    .row
+      .col-md-4
+        Current plan:
+      .col-md-8
+        %p
+          = current_user.plan
+    .row
+      .col-md-4
+        Next payment:
+      .col-md-8
+        %p
+          = current_user.subscription_expires || Time.now
+.row
+  .col-md-12
+    %table.table
+      %thead
+        %th
+          Name
+        %th
+          Emails available
+        %th
+          Position
+        %th
+          Location
+        %th
+          Emails revealed
+        %th
+          Profile
+      %tbody
+        - current_user.profiles.each do |p|
+          %tr
+            %td
+              =p.name
+            %td
+              =p.emails_available
+            %td
+              =p.position
+            %td
+              =p.location
+            %td
+              =p.email
+            -#%td
+            -#  =p.notes unless p.notes.empty?
+            %td
+              = link_to 'Linkedin profile',p.linkedin_url, target: :_blank
+            %td
+              =p.twitter_url
+            %td
+              =p.facebook_url
 
-%table.table
-  %tbody
-    - current_user.profiles.each do |p|
-      %tr
-        %td
-          =p.emails_available
-        %td
-          =p.name
-        %td
-          =p.position
-        %td
-          =p.location
-        %td
-          =p.email
-        %td
-          =p.notes unless p.notes.empty?
-        %td
-          =p.linkedin_url
-        %td
-          =p.twitter_url
-        %td
-          =p.facebook_url
+.row
+  .col-md-10
+  .col-md-2
+    = link_to download_user_path(current_user, format: :csv), class: 'btn btn-default' do
+      Download
+      = fa_icon 'download'
