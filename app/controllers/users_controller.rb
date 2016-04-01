@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     if @user.nil?
       render nothing: true, status: :unauthorized
     else
-      @user.add_profiles(person_params)
+      @user.add_profiles(user_params)
       render nothing: true, status: :ok
     end
   end
@@ -26,6 +26,10 @@ class UsersController < ApplicationController
   end
 
   private
+  def user_params
+    params.permit!
+  end
+
   def set_user
     if params[:uid].present? and params[:email].present?
       @user = User.find_by(uid: params[:uid], email: params[:email]) || User.create_with_uid_and_email(uid: params[:uid], email: params[:email])

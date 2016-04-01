@@ -6,7 +6,7 @@
   .col-2-md
     x
   .col-8-md
-    =form_tag get_emails_available_profiles_path(format: :json), method: :post do
+    =form_tag @path, method: :post do
       .form-group
         = text_field_tag :uid, @uid || '102594557413371756317', class: 'form-control', placeholder: 'path'
       .form-group

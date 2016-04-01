@@ -52,7 +52,7 @@ class Profile < ActiveRecord::Base
             profile = Profile.new
             profile.linkedin_id = p.id
 
-            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.id}"
+            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.public_id}"
 
             profile.name = p.name
             profile.position = p.position

@@ -20,8 +20,8 @@ Rails.application.routes.draw do
   end
 
   # post 'download', to: 'users#download'
-  get 'test', to: 'tests#index'
-  post 'test', to: 'tests#index'
+  get 'test/add_profiles', to: 'tests#add_profiles'
+  get 'test/get_emails_available', to: 'tests#get_emails_available'
 
   post '/people/find', to: 'profiles#get_emails_available'
 

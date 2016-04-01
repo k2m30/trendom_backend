@@ -7,12 +7,12 @@ class ProfilesController < ApplicationController
     if @user.nil?
       render nothing: true, status: :unauthorized
     else
-      render json: Profile.get_emails_available(person_params)
+      render json: Profile.get_emails_available(profiles_params)
     end
   end
 
   private
-  def person_params
+  def profiles_params
     params.permit! #(:name, :linkedin_id, :position, :location, :industry, :email)
   end
 

@@ -1,10 +1,17 @@
-require 'open-uri'
-# require 'test_helper'
-
 class TestsController < ApplicationController
-  def index
+  def get_emails_available
     @email = params[:email]
     @uid = params[:uid]
     @data = params[:data]
+    @path = get_emails_available_profiles_path
+    render :index
+  end
+
+  def add_profiles
+    @email = params[:email]
+    @uid = params[:uid]
+    @data = params[:data]
+    @path = add_profiles_user_path(User.first)
+    render :index
   end
 end
