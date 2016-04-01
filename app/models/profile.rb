@@ -1,5 +1,6 @@
 require_relative 'full_contact_db'
 require_relative 'pipl_db'
+require_relative 'user_request'
 
 class Profile < ActiveRecord::Base
   has_and_belongs_to_many :users
@@ -41,34 +42,34 @@ class Profile < ActiveRecord::Base
 
   def self.get_emails_available(params)
     hash = {}
-    params['data'].map do |json|
+    request = UserRequest.new(params)
+    request.profiles.map do |p|
       account_id = ''
-      id = json['source']['id']
-      case json['source']['social_network']
+      case p.social_network
         when 'linkedin'
-          profile = Profile.find_by(linkedin_id: id)
+          profile = Profile.find_by(linkedin_id: p.id)
           if profile.nil?
             profile = Profile.new
-            profile.linkedin_id = id
+            profile.linkedin_id = p.id
 
-            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{json['source']['public_id']}"
+            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.id}"
 
-            profile.name = json['name']
-            profile.position = json['position']
-            profile.location = json['location'] || json['Location']
-            profile.photo = json['photo']
-            account_id = "#{id}@linkedin"
+            profile.name = p.name
+            profile.position = p.position
+            profile.location = p.location
+            profile.photo = p.photo
+            account_id = "#{p.id}@linkedin"
           end
         when 'facebook'
         when 'twitter'
       end
-      unless account_id.empty?
-        profile.emails_available = PiplDb.emails_available(name: json['name'], account_id: account_id) #|| FullContactDb.find(params)
-        profile.save
-      end
-      hash[id] = "#{profile.emails_available} emails available"
+
+      profile.emails_available = PiplDb.emails_available(name: p.name, account_id: account_id) #|| FullContactDb.find(params)
+      profile.save
+
+      hash[p.id] = profile.emails_available
     end
-    # logger.warn hash.to_json
+    logger.warn hash.to_json
     hash.to_json
   end
 end

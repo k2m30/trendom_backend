@@ -23,6 +23,7 @@ class PiplDb
   end
 
   def self.emails_available(person_hash)
+    return rand(0..4) if Rails.env.development?
     response = get_response(person_hash, 'email and phone and ethnicity and image'.freeze)
     if response.present? and response.available_data.present? and response.available_data.basic.present?
       response.available_data.basic.emails

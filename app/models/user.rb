@@ -2,7 +2,7 @@ require 'csv'
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :rememberable, :trackable, :omniauthable, :omniauth_providers => [:google_oauth2]
+  devise :database_authenticatable, :trackable, :omniauthable, :omniauth_providers => [:google_oauth2]
 
   has_and_belongs_to_many :profiles
 
@@ -11,11 +11,11 @@ class User < ActiveRecord::Base
   end
 
   def add_profiles(params)
-    params['data'].map do |json|
-      id = json['source']['id']
-      case json['source']['social_network']
+    request = UserRequest.new(params)
+    request.profiles.map do |profile|
+      case profile.social_network
         when 'linkedin'
-          self.profiles << Profile.find_by(linkedin_id: id)
+          self.profiles << Profile.find_by(linkedin_id: profile.id)
         when 'facebook'
         when 'twitter'
       end
@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  def self.create_with_uid_and_email(uid: , email: )
+  def self.create_with_uid_and_email(uid, email)
     User.create(email: email,
                 password: Devise.friendly_token[0, 20],
                 uid: uid)
