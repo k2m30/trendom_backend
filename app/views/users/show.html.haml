@@ -34,6 +34,7 @@
     %table.table
       %thead
         %th
+        %th
           Name
         %th
           Emails available
@@ -49,6 +50,9 @@
         - @user.profiles.each do |p|
           %tr
             %td
+              =link_to remove_profile_users_path(id: p.id), method: :post do
+                = fa_icon 'remove'
+            %td
               =p.name
             %td
               =p.emails_available
@@ -61,7 +65,7 @@
             -#%td
             -#  =p.notes unless p.notes.empty?
             %td
-              = link_to 'Linkedin profile',p.linkedin_url, target: :_blank
+              = link_to 'Linkedin profile', p.linkedin_url, target: :_blank
             %td
               =p.twitter_url
             %td

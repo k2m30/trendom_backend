@@ -1,5 +1,5 @@
 class UserRequest
-  attr_accessor :profiles, :uid, :email
+  attr_accessor :profiles, :uid, :email, :source
 
   def initialize(params)
     @profiles = []
@@ -16,6 +16,11 @@ class UserRequest
     hash[:data].map do |json|
       @profiles << Person.new(json)
     end
+    @source = @profiles.first.social_network.to_sym
+  end
+
+  def [](id)
+    @profiles.select{|profile| profile.id.to_i == id.to_i }.first
   end
 end
 

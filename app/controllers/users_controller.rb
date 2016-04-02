@@ -1,9 +1,16 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:add_profiles] unless Rails.env.development?
+  before_action :authenticate_user!, except: [:add_profiles] #unless Rails.env.development?
   before_action :set_user
   skip_before_filter :verify_authenticity_token, only: [:download, :add_profiles]
 
   def show
+  end
+
+  def remove_profile
+    profile = Profile.find(params[:id])
+    @user.profiles.delete(profile) unless profile.nil?
+
+    redirect_to user_path(@user)
   end
 
   def add_profiles
@@ -35,7 +42,7 @@ class UsersController < ApplicationController
       @user = User.find_by(uid: params[:uid], email: params[:email]) || User.create_with_uid_and_email(uid: params[:uid], email: params[:email])
     else
       @user = current_user
-      @user = User.first if Rails.env.development?
+      # @user = User.first if Rails.env.development?
     end
   end
 end

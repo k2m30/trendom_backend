@@ -43,32 +43,36 @@ class Profile < ActiveRecord::Base
   def self.get_emails_available(params)
     hash = {}
     request = UserRequest.new(params)
-    request.profiles.map do |p|
-      account_id = ''
-      case p.social_network
-        when 'linkedin'
-          profile = Profile.find_by(linkedin_id: p.id)
-          if profile.nil?
-            profile = Profile.new
-            profile.linkedin_id = p.id
+    ids = request.profiles.map(&:id).map(&:to_i)
+    profiles = []
+    case request.source
+      when :linkedin
+        profiles = Profile.where(linkedin_id: [ids])
 
-            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.public_id}"
+        profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
 
-            profile.name = p.name
-            profile.position = p.position
-            profile.location = p.location
-            profile.photo = p.photo
-            account_id = "#{p.id}@linkedin"
-          end
-        when 'facebook'
-        when 'twitter'
-      end
+        (ids - profiles.pluck(:linkedin_id)).each do |id|
+          p = request[id]
 
-      profile.emails_available = PiplDb.emails_available(name: p.name, account_id: account_id) #|| FullContactDb.find(params)
-      profile.save
+          profile = Profile.new
+          profile.linkedin_id = p.id
+          profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze
+          profile.name = p.name
+          profile.position = p.position
+          profile.location = p.location
+          profile.photo = p.photo
+          account_id = "#{p.id}@linkedin".freeze
 
-      hash[p.id] = profile.emails_available
+          profile.emails_available = PiplDb.emails_available(name: p.name, account_id: account_id) #|| FullContactDb.find(params)
+
+          profile.save
+          hash[profile.linkedin_id] = profile.emails_available
+        end
+
+      when :facebook
+
     end
+
     logger.warn hash.to_json
     hash.to_json
   end

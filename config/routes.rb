@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     end
     collection do
       post 'add_profiles'
+      post 'remove_profile'
     end
   end
   namespace :users do
