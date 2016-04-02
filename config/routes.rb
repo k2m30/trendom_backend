@@ -10,9 +10,10 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show] do
     member do
-      # get 'show'
-      post 'add_profiles'
       get 'download'
+    end
+    collection do
+      post 'add_profiles'
     end
   end
   namespace :users do
