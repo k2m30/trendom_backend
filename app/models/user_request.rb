@@ -20,7 +20,7 @@ class UserRequest
 end
 
 class Person
-  attr_accessor :name, :social_network, :position, :location, :photo, :id
+  attr_accessor :name, :social_network, :position, :location, :photo, :id, :public_id
 
   def initialize(json)
     @name = json[:name]
@@ -29,7 +29,7 @@ class Person
     @position = json[:position]
     @location = json[:location]
     @photo = json[:photo]
-    @id = json[:id]
+    @id = json[:source][:id]
   end
 # {"name" => "Greg Barnett",
 #  "source" => {"id" => "112123234", "public_id" => "ADEAAAau3WIBXuhln8uvxcEEG7Hb5M1I74oQyh4", "social_network" => "linkedin"},
