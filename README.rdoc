@@ -28,8 +28,8 @@
 
                  Лишнее -   [:data][:email]
                             [:data][:url]
+                            [:data][:id]
                             [:profile]
-                            [:id]
 
                  Кнопка Add
                            add_profiles_users POST     /users/add_profiles(.:format)                            users#add_profiles
