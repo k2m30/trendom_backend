@@ -3,6 +3,7 @@
                 get_emails_available_profiles POST     /profiles/get_emails_available(.:format)                 profiles#get_emails_available
 
                 request:
+                было бы круто если бы в этот запрос не надо было передавать uid/email - я бы запускал его в background и не висел бы спиннер на popup'е 
 
                 {   "uid"=>"102594557413371756317",
                     "email"=>"mikhail.chuprynski@gmail.com",
@@ -35,6 +36,7 @@
                            add_profiles_users POST     /users/add_profiles(.:format)                            users#add_profiles
                  request: то же
                  respond: то же
+                 если бы ты тут вернёш общее кол-во запросов для пользователя - я смогу впихнуть это в каунтер на кнопке download 
 
 
                  Кнопка Download (http://account.trendom.io)
