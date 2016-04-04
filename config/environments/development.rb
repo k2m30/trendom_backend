@@ -32,6 +32,12 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
-  # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
+  config.log_level = :warn
+  config.log_tags = ["cv-#{Rails.env[0]}"]
+  config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(File.join(Rails.root, "log", "#{Rails.env}.log")))
+
+  Rails.application.middleware.use ConciseLogging::LogMiddleware
+  ConciseLogging::LogSubscriber.attach_to :action_controller
+
+
 end

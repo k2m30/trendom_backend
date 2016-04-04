@@ -76,5 +76,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # config.action_dispatch.default_headers = { 'X-Frame-Options' => 'ALLOWALL' }
+  config.log_level = :warn
+  config.log_tags = ["cv-#{Rails.env[0]}"]
+  config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(File.join(Rails.root, "log", "#{Rails.env}.log")))
 end
