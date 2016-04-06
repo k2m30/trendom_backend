@@ -71,12 +71,10 @@ Rails.application.configure do
   # config.autoflush_log = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = SilentLogger.new
+  config.log_formatter.add_silencer { |line| line =~ /lib/ }
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.log_level = :warn
-  config.log_tags = ["cv-#{Rails.env[0]}"]
-  config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(File.join(Rails.root, "log", "#{Rails.env}.log")))
 end

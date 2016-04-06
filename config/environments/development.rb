@@ -33,11 +33,7 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
 
   config.log_level = :warn
-  config.log_tags = ["cv-#{Rails.env[0]}"]
-  config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(File.join(Rails.root, "log", "#{Rails.env}.log")))
-
-  Rails.application.middleware.use ConciseLogging::LogMiddleware
-  ConciseLogging::LogSubscriber.attach_to :action_controller
-
+  config.log_formatter = SilentLogger.new
+  config.log_formatter.add_silencer { |line| line =~ /lib/ }
 
 end
