@@ -6,6 +6,15 @@ class UsersController < ApplicationController
   def show
   end
 
+  def edit
+
+  end
+
+  def update
+    @user.update!(user_params)
+    redirect_to user_path(@user)
+  end
+
   def remove_profile
     profile = Profile.find(params[:id])
     @user.profiles.delete(profile) unless profile.nil?
@@ -25,16 +34,23 @@ class UsersController < ApplicationController
   end
 
   def download
-    respond_to do |format|
-      format.html { redirect_to user_path(@user) }
-      format.csv { send_data @user.export_profiles }
-      format.xls { send_data @user.export_profiles(col_sep: "\t") }
+    if @user.active?
+      respond_to do |format|
+        format.html { redirect_to user_path(@user) }
+        format.csv { send_data @user.export_profiles }
+        format.xls { send_data @user.export_profiles(col_sep: "\t") }
+      end
+    else
+      start_payment_process
     end
+
   end
 
   private
   def user_params
-    params.permit!
+    params.require(:user).permit(:card_holder_name, :street_address,
+                                 :street_address2, :city, :state, :zip,
+                                 :country, :billing_email, :phone)
   end
 
   def set_user

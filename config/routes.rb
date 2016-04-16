@@ -8,13 +8,14 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: {omniauth_callbacks: 'users/oauth_callback'}
 
-  resources :users, only: [:show] do
+  resources :users, only: [:show, :edit, :update] do
     member do
       get 'download'
     end
     collection do
       post 'add_profiles'
       post 'remove_profile'
+      # get 'details'
     end
   end
   namespace :users do
