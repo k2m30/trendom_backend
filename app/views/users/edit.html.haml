@@ -57,6 +57,7 @@
 ['Yugoslavia', 'YUG'], ['Zaire', 'ZAR'], ['Zambia', 'ZMB'], ['Zimbabwe', 'ZWE']]
 .row
   .col-md-3
+  .col-md-3
     =bootstrap_form_for(@user) do |f|
       = f.text_field :card_holder_name, value: @user.card_holder_name || @user.name
       = f.text_field :street_address
@@ -68,4 +69,5 @@
       = f.email_field :billing_email, label: 'Email', value: @user.billing_email || @user.email
       = f.text_field :phone
 
-      = f.submit 'Save'
+      = f.submit 'Confirm user details'
+  .col-md-3

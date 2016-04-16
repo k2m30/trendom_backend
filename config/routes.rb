@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     collection do
       post 'add_profiles'
       post 'remove_profile'
-      # get 'details'
+      get 'choose_plan'
     end
   end
   namespace :users do

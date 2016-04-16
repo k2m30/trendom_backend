@@ -7,12 +7,15 @@ class UsersController < ApplicationController
   end
 
   def edit
-
   end
 
   def update
     @user.update!(user_params)
-    redirect_to user_path(@user)
+    redirect_to choose_plan_users_path
+  end
+
+  def choose_plan
+
   end
 
   def remove_profile
@@ -41,7 +44,7 @@ class UsersController < ApplicationController
         format.xls { send_data @user.export_profiles(col_sep: "\t") }
       end
     else
-      start_payment_process
+      redirect_to edit_user_path(@user)
     end
 
   end

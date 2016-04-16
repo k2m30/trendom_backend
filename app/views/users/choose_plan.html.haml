@@ -1,0 +1,111 @@
+.row
+  .col-md-3
+    .plan.beginner
+      %h4.text-center Beginner
+      %ul
+        %li
+          %p.large
+            %strong $39 Monthly per user
+        %li
+          %p.large 80 prospects
+        %li
+          %p.large
+            \~
+            48¢ per contact
+        %li
+          %p.large Enrich leads
+        %li
+          %p.large Add Excel sheets
+        %li
+          %p.large Access to Essential Guidelines
+    %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+      %input{name: 'sid', type: 'hidden', value: '202864835'}
+      %input{name: 'mode', type: 'hidden', value: '2CO'}
+      %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+      %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+      %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+      %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+      %input{name: 'li_0_price', type: 'hidden', value: '39.00'}
+      %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+      %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+      %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+
+      %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+      %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+      %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+      %input{name: 'city', type: 'hidden', value: @user.city}/
+      %input{name: 'state', type: 'hidden', value: @user.state}/
+      %input{name: 'zip', type: 'hidden', value: '43228'}/
+      %input{name: 'country', type: 'hidden', value: @user.country}/
+      %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+      %input{name: 'phone', type: 'hidden', value: @user.phone}/
+      %button.btn.btn-block.beginner{name: 'submit', type: 'submit', value: 'Choose advanced'}
+        %h4.text-center Choose beginner
+
+  .col-md-3
+    .plan.advanced
+      %h4.text-center Advanced
+      %ul
+        %li
+          %p.large
+            %strong $99 Monthly per user
+        %li
+          %p.large 250 prospects
+        %li
+          %p.large
+            \~
+            39¢ per contact
+        %li
+          %p.large Enrich leads
+        %li
+          %p.large Add Excel and Google sheets
+        %li
+          %p.large Access to Full Guidelines
+
+    %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+      %input{name: 'sid', type: 'hidden', value: '202864835'}
+      %input{name: 'mode', type: 'hidden', value: '2CO'}
+      %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+      %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+      %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+      %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+      %input{name: 'li_0_price', type: 'hidden', value: '99.00'}
+      %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+      %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+      %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+
+      %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+      %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+      %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+      %input{name: 'city', type: 'hidden', value: @user.city}/
+      %input{name: 'state', type: 'hidden', value: @user.state}/
+      %input{name: 'zip', type: 'hidden', value: '43228'}/
+      %input{name: 'country', type: 'hidden', value: @user.country}/
+      %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+      %input{name: 'phone', type: 'hidden', value: @user.phone}/
+      %button.btn.btn-block.advanced{name: 'submit', type: 'submit', value: 'Choose advanced'}
+        %h4.text-center Choose advanced
+
+  .col-md-3
+    .plan.special
+      %h4.text-center Special
+      %ul
+        %li
+          %p.large Mass emails
+        %li
+          %p.large CRM integration
+        %li
+          %p.large Scheduled prospects delivery
+        %li
+          %p.large Particular site with emails
+        %li
+          %p.large You need special quotation
+        %li
+          %p.large Any customization
+    %a{href: 'mailto:team@trendom.io', role: 'button'}
+      %button.btn.btn-block.special{href: 'mailto:team@trendom.io', :name => 'submit', :type => 'submit', :value => 'Choose advanced'}
+        %h4.text-center Contact us
+
+
+
+%script{src: 'https://www.2checkout.com/static/checkout/javascript/direct.min.js'}
