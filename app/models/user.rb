@@ -12,15 +12,16 @@ class User < ActiveRecord::Base
 
   def add_profiles(params)
     request = UserRequest.new(params)
-    request.profiles.map do |profile|
-      case profile.social_network
-        when 'linkedin'
-          self.profiles << Profile.find_by(linkedin_id: profile.id)
-        when 'facebook'
-        when 'twitter'
-      end
+    case request.source
+      when :linkedin
+        profiles = Profile.where(linkedin_id: [request.ids])
+        profiles.each do |profile|
+          self.profiles << profile unless self.profiles.include?(profile)
+        end
+      when :facebook
+      when :twitter
     end
-    self.save
+    self.save if changed?
   end
 
   def self.create_with_uid_and_email(uid, email)

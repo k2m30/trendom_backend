@@ -27,6 +27,9 @@ Rails.application.routes.draw do
 
   post '/people/find', to: 'profiles#get_emails_available'
 
+  post 'purchase', to: 'purchases#index'
+  # get 'purchase', to: 'purchases#index'
+
   root 'users#show'
   mount Tail::Engine, at: '/tail'
 end

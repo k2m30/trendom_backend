@@ -43,30 +43,31 @@ class Profile < ActiveRecord::Base
   def self.get_emails_available(params)
     hash = {}
     request = UserRequest.new(params)
-    ids = request.profiles.map(&:id).map(&:to_i)
-    profiles = []
+    ids = request.ids
     case request.source
       when :linkedin
         profiles = Profile.where(linkedin_id: [ids])
 
-        profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
+        # profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
+        hash = profiles.pluck(:linkedin_id, :emails_available).to_h
+        ActiveRecord::Base.transaction do
+          (ids - profiles.pluck(:linkedin_id)).each do |id|
+            p = request[id]
 
-        (ids - profiles.pluck(:linkedin_id)).each do |id|
-          p = request[id]
+            profile = Profile.new
+            profile.linkedin_id = p.id
+            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze
+            profile.name = p.name
+            profile.position = p.position
+            profile.location = p.location
+            profile.photo = p.photo
+            account_id = "#{p.id}@linkedin".freeze
 
-          profile = Profile.new
-          profile.linkedin_id = p.id
-          profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze
-          profile.name = p.name
-          profile.position = p.position
-          profile.location = p.location
-          profile.photo = p.photo
-          account_id = "#{p.id}@linkedin".freeze
+            profile.emails_available = PiplDb.emails_available(name: p.name, account_id: account_id) #|| FullContactDb.find(params)
 
-          profile.emails_available = PiplDb.emails_available(name: p.name, account_id: account_id) #|| FullContactDb.find(params)
-
-          profile.save
-          hash[profile.linkedin_id] = profile.emails_available
+            profile.save
+            hash[profile.linkedin_id] = profile.emails_available
+          end
         end
 
       when :facebook

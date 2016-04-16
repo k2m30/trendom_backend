@@ -17,7 +17,7 @@ class SilentLogger
     end
 
     backtrace.delete_if{|line| line.empty?}
-    backtrace.insert(0, "#{severity} #{timestamp.to_formatted_s(:short)}")
+    backtrace.insert(0, "#{severity} #{timestamp.to_formatted_s(:long)}")
     backtrace.insert(-1, "\n")
     backtrace.join("\n")
   end

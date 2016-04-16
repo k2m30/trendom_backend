@@ -7,6 +7,7 @@ class UserRequest
     hash = params.to_h.deep_symbolize_keys
     @uid = hash[:uid]
     @email = hash[:email]
+    @source = hash[:source].to_sym
 
     if hash[:data].is_a? String
       hash[:data] = JSON.parse(hash[:data].gsub('=>', ':'))
@@ -14,27 +15,30 @@ class UserRequest
     end
 
     hash[:data].map do |json|
-      @profiles << Person.new(json)
+      @profiles << Person.new(json, @source)
     end
-    @source = @profiles.first.social_network.to_sym
   end
 
   def [](id)
     @profiles.select{|profile| profile.id.to_i == id.to_i }.first
+  end
+
+  def ids
+    @profiles.map(&:id).map(&:to_i)
   end
 end
 
 class Person
   attr_accessor :name, :social_network, :position, :location, :photo, :id, :public_id
 
-  def initialize(json)
+  def initialize(json, source)
     @name = json[:name]
-    @social_network = json[:source][:social_network]
-    @public_id = json[:source][:public_id]
+    @social_network = source
+    @public_id = json[:public_id]
     @position = json[:position]
     @location = json[:location]
     @photo = json[:photo]
-    @id = json[:source][:id]
+    @id = json[:id]
   end
 # {"name" => "Greg Barnett",
 #  "source" => {"id" => "112123234", "public_id" => "ADEAAAau3WIBXuhln8uvxcEEG7Hb5M1I74oQyh4", "social_network" => "linkedin"},
