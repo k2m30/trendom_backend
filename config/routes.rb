@@ -10,12 +10,12 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show, :edit, :update] do
     member do
-      get 'download'
     end
     collection do
       post 'add_profiles'
       post 'remove_profile'
       get 'choose_plan'
+      get 'download'
     end
   end
   namespace :users do

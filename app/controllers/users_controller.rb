@@ -38,16 +38,15 @@ class UsersController < ApplicationController
   end
 
   def download
-    if @user.active?
-      respond_to do |format|
-        format.html { redirect_to user_path(@user) }
-        format.csv { send_data @user.export_profiles }
-        format.xls { send_data @user.export_profiles(col_sep: "\t") }
+    respond_to do |format|
+      format.csv do
+        if @user.enough_calls?
+          send_data @user.export_profiles
+        else
+          redirect_to root_path, alert: 'Reduce number of prospects to download according to calls left in your subscription'
+        end
       end
-    else
-      redirect_to edit_user_path(@user)
     end
-
   end
 
   private

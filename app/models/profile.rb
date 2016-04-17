@@ -7,45 +7,22 @@ class Profile < ActiveRecord::Base
   serialize :notes, Hash
   serialize :emails
 
-  def get_email
-    return emails unless emails.empty?
-    return emails if emails_available.zero?
+  def get_emails_and_notes
+    return unless emails.empty?
+    return if emails_available.zero?
 
+    account_id = nil
+    account_id = "#{linkedin_id}@linkedin" unless linkedin_id.nil?
+    account_id = "#{facebook_id}@facebook" unless facebook_id.nil?
+    account_id = "#{twitter_id}@twitter" unless twitter_id.nil?
+    return [] if account_id.nil?
 
-  end
-
-  def self.get_emails(params)
-    hash = {}
-    params['data'].map do |json|
-      account_id = ''
-      id = json['source']['id']
-      case json['source']['social_network']
-        when 'linkedin'
-          profile = Profile.find_by(linkedin_id: id)
-          if profile.nil?
-            profile = Profile.new
-            profile.linkedin_id = id
-            account_id = "#{id}@linkedin"
-          end
-        when 'facebook'
-        when 'twitter'
-      end
-      unless account_id.empty?
-        result = PiplDb.find(name: json['name'], account_id: account_id) #|| FullContactDb.find(params)
-        profile.email = result[:emails].to_s
-        profile.notes = result[:notes]
-        profile.save
-      end
-
-      if profile.email.nil? or profile.email.empty?
-        hash[id] = nil
-      else
-        hash[id] = profile.email.split(',').sample.sub(/.*@/, '****@')
-      end
-
-    end
-    # logger.warn hash.to_json
-    hash.to_json
+    person = PiplDb.find(name: name, account_id: account_id) #|| FullContactDb.find(params)
+    notes = person.to_hash
+    notes.delete(:search_pointer)
+    notes.delete(:emails)
+    update(notes: notes, emails: person.emails.map(&:address))
+    person
   end
 
   def self.get_emails_available(params)

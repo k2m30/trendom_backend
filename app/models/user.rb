@@ -12,6 +12,10 @@ class User < ActiveRecord::Base
     active
   end
 
+  def enough_calls?
+    calls_left >= profiles_with_hidden_emails.size
+  end
+
   def profiles_with_revealed_emails
     profiles.where(id: revealed_ids)
   end
@@ -90,7 +94,14 @@ class User < ActiveRecord::Base
   end
 
   def export_profiles(options = {})
-    columns = %w(name position photo location email notes linkedin_url twitter_url facebook_url linkedin_id twitter_id facebook_id)
+    new_revealed = revealed_ids
+    hidden_emails_size = profiles_with_hidden_emails.size
+    profiles_with_hidden_emails.each do |profile|
+      profile.get_emails_and_notes
+      new_revealed << profile.id
+    end
+    update(revealed_ids: new_revealed, calls_left: calls_left - hidden_emails_size) if hidden_emails_size > 0
+    columns = %w(name position photo location emails notes linkedin_url twitter_url facebook_url linkedin_id twitter_id facebook_id)
     CSV.generate(options) do |csv|
       csv << columns.map(&:capitalize)
       profiles.each do |profile|

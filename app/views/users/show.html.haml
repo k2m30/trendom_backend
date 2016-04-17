@@ -62,7 +62,8 @@
               =p.location
             %td
               -p.emails.each do |email|
-                %p =email
+                %p
+                  =email
             -#%td
             -#  =p.notes unless p.notes.empty?
             %td
@@ -100,6 +101,13 @@
 .row
   .col-md-8
   .col-md-4
-    = link_to download_user_path(@user, format: :csv), class: 'btn btn-info' do
-      = @user.active? ? 'Download' : 'Choose subscription plan to download prospects'
-      = fa_icon 'download'
+    -if @user.active?
+      = link_to download_users_path(format: :csv), class: 'btn btn-info' do
+        Download
+        = fa_icon 'download'
+    -else
+      = link_to edit_user_path(@user), class: 'btn btn-info' do
+        Choose subscription plan to download prospects
+        = fa_icon 'download'
+
+

@@ -2,24 +2,8 @@ require 'pipl'
 
 class PiplDb
   def self.find(person_hash)
-    # result = {}
-    # result[:emails] = ['mikhail.chuprynski@gmail.com', '1m@tut.by'].join(',')
-    # return result
-
     response = get_response(person_hash, 'email'.freeze)
-
-    if response.person.nil?
-      return {emails: '', notes: nil}
-    end
-    emails = response.person.emails.map(&:address).join(',')
-    result = {}
-
-    notes = response.person.to_hash
-    notes.delete(:search_pointer)
-    notes[:urls] = response.person.urls.map(&:url)
-    result[:emails] = emails
-    result[:notes] = notes
-    return result
+    return response.person
   end
 
   def self.emails_available(person_hash)
