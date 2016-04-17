@@ -35,5 +35,6 @@ Rails.application.configure do
   # config.log_level = :warn
   config.log_formatter = SilentLogger.new
   config.log_formatter.add_silencer { |line| line =~ /lib/ }
+  config.log_formatter.add_silencer { |line| line =~ /\/assets\// }
 
 end

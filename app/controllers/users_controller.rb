@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: [:download, :add_profiles]
 
   def show
+    @user.active?
   end
 
   def edit
@@ -31,7 +32,7 @@ class UsersController < ApplicationController
     if @user.nil?
       render nothing: true, status: :unauthorized
     else
-      @user.add_profiles(user_params)
+      @user.add_profiles(params)
       render nothing: true, status: :ok
     end
   end

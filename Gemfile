@@ -45,6 +45,7 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '>= 3.2'
 gem 'font-awesome-rails'
 gem 'bootstrap_form'
+gem 'curb'
 
 gem 'haml-rails', '~> 0.9'
 

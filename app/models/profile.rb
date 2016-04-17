@@ -5,6 +5,14 @@ require_relative 'user_request'
 class Profile < ActiveRecord::Base
   has_and_belongs_to_many :users
   serialize :notes, Hash
+  serialize :emails
+
+  def get_email
+    return emails unless emails.empty?
+    return emails if emails_available.zero?
+
+
+  end
 
   def self.get_emails(params)
     hash = {}
