@@ -27,6 +27,7 @@ class Profile < ActiveRecord::Base
 
   def self.get_emails_available(params)
     hash = {}
+    threads = []
     request = UserRequest.new(params)
     ids = request.ids
     case request.source
@@ -35,8 +36,9 @@ class Profile < ActiveRecord::Base
 
         # profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
         hash = profiles.pluck(:linkedin_id, :emails_available).to_h
-        ActiveRecord::Base.transaction do
-          (ids - profiles.pluck(:linkedin_id)).each do |id|
+
+        (ids - profiles.pluck(:linkedin_id)).each do |id|
+          thread = Thread.new do
             p = request[id]
 
             profile = Profile.new
@@ -53,10 +55,18 @@ class Profile < ActiveRecord::Base
             profile.save
             hash[profile.linkedin_id] = profile.emails_available
           end
+          threads << thread
         end
 
       when :facebook
 
+    end
+    unless threads.empty?
+      threads.each(&:join)
+      while threads.map(&:status).uniq != [false] do
+        puts 'working'
+        sleep 0.5
+      end
     end
 
     logger.warn hash.to_json
