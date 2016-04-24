@@ -8,6 +8,12 @@ class Profile < ActiveRecord::Base
   serialize :emails
 
   def get_emails_and_notes
+    if Rails.env.development?
+      sleep 2
+      update(notes: {}, emails: [Faker::Internet.email]) if self.emails.empty?
+      return
+    end
+
     return unless emails.empty?
     return if emails_available.zero?
 

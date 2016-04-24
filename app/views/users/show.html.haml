@@ -25,10 +25,10 @@
           = @user.plan
     .row
       .col-md-4
-        Next payment:
+        Subscription is valid till:
       .col-md-8
         %p
-          = @user.subscription_expires || Time.now.to_formatted_s(:short)
+          = @user.subscription_expires.to_formatted_s(:short) || Time.now.to_formatted_s(:short)
 .row
   .col-md-12
     %table.table
@@ -102,12 +102,30 @@
   .col-md-8
   .col-md-4
     -if @user.active?
-      = link_to download_users_path(format: :csv), class: 'btn btn-info' do
-        Download
-        = fa_icon 'download'
+      - if @user.profiles_with_hidden_emails.size > 0
+        = link_to '#reveal', class: 'btn btn-info', id: 'reveal', data: reveal_emails_users_path do
+          Reveal emails
+          = fa_icon 'download'
+        = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download', style: 'display:none' do
+          Download
+          = fa_icon 'download'
+      - else
+        = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
+          Download
+          = fa_icon 'download'
     -else
       = link_to edit_user_path(@user), class: 'btn btn-info' do
         Choose subscription plan to download prospects
         = fa_icon 'download'
 
-
+.progress-window{style: 'display:none'}
+  .row
+    .col-xs-12
+      .progress-status.text-primary#description
+        It will take a while..
+  .row
+    .col-xs-12
+      .progress.progress-striped.active
+        .progress-bar
+          .text-primary#progress
+            0%

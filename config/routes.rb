@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       post 'remove_profile'
       get 'choose_plan'
       get 'download'
+      get 'progress'
+      get 'reveal_emails'
     end
   end
   namespace :users do

@@ -93,15 +93,20 @@ class User < ActiveRecord::Base
            uid: access_token[:uid])
   end
 
-  def export_profiles(options = {})
+  def reveal_emails
     new_revealed = revealed_ids
     hidden_emails_size = profiles_with_hidden_emails.size
-    profiles_with_hidden_emails.each do |profile|
+    self.update(progress: 0.0) if hidden_emails_size > 0
+    profiles_with_hidden_emails.each_with_index do |profile, i|
       profile.get_emails_and_notes
+      self.update(progress: ((i+1)/hidden_emails_size.to_f).round(4)*100)
       new_revealed << profile.id
     end
-    update(revealed_ids: new_revealed, calls_left: calls_left - hidden_emails_size) if hidden_emails_size > 0
-    columns = %w(name position photo location emails notes linkedin_url twitter_url facebook_url linkedin_id twitter_id facebook_id)
+    self.update(revealed_ids: new_revealed, calls_left: calls_left - hidden_emails_size) if hidden_emails_size > 0
+  end
+
+  def export_profiles(options = {})
+    columns = %w(name position photo location emails notes linkedin_url twitter_url facebook_url)
     CSV.generate(options) do |csv|
       csv << columns.map(&:capitalize)
       profiles.each do |profile|

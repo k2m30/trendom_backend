@@ -37,6 +37,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def reveal_emails
+    @user.reveal_emails
+    render nothing: true, status: :ok
+  end
+
+  def progress
+    render text: @user.progress.round(2)
+  end
+
   def download
     respond_to do |format|
       format.csv do
