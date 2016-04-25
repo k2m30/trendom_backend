@@ -27,6 +27,7 @@ class UsersController < ApplicationController
   end
 
   def add_profiles
+    response.headers['Access-Control-Allow-Origin'] = '*'
     logger.warn params
 
     if @user.nil?

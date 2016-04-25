@@ -3,6 +3,7 @@ class ProfilesController < ApplicationController
 
   def get_emails_available
     logger.warn params
+    response.headers['Access-Control-Allow-Origin'] = '*'
     set_user
     if @user.nil?
       render nothing: true, status: :unauthorized
