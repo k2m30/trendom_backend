@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :profiles, only: [] do
     collection do
       post 'get_emails_available'
+      options 'get_emails_available'
     end
   end
 
