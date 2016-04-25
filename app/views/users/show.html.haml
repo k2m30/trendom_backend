@@ -28,7 +28,7 @@
         Subscription is valid till:
       .col-md-8
         %p
-          = @user.subscription_expires.to_formatted_s(:short) || Time.now.to_formatted_s(:short)
+          = @user.subscription_expires.nil? ? Time.now.to_formatted_s(:short) : @user.subscription_expires.to_formatted_s(:short)
 .row
   .col-md-12
     %table.table
