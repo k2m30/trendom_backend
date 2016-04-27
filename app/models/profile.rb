@@ -46,19 +46,11 @@ class Profile < ActiveRecord::Base
         (ids - profiles.pluck(:linkedin_id)).each do |id|
           thread = Thread.new do
             p = request[id]
+            emails_available = PiplDb.emails_available(name: p.name, account_id: "#{p.id}@linkedin".freeze) #|| FullContactDb.find(params)
 
-            profile = Profile.new
-            profile.linkedin_id = p.id
-            profile.linkedin_url = "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze
-            profile.name = p.name
-            profile.position = p.position
-            profile.location = p.location
-            profile.photo = p.photo
-            account_id = "#{p.id}@linkedin".freeze
+            profile = Profile.create(linkedin_id: p.id, linkedin_url: "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze,
+                           name: p.name, position: p.position, location: p.location, photo: p.photo, emails_available: emails_available)
 
-            profile.emails_available = PiplDb.emails_available(name: p.name, account_id: account_id) #|| FullContactDb.find(params)
-
-            profile.save
             hash[profile.linkedin_id] = profile.emails_available
           end
           threads << thread
