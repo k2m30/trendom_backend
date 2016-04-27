@@ -34,6 +34,7 @@ class Profile < ActiveRecord::Base
   def self.get_emails_available(params)
     hash = {}
     threads = []
+    new_profiles = []
     request = UserRequest.new(params)
     ids = request.ids
     case request.source
@@ -42,16 +43,14 @@ class Profile < ActiveRecord::Base
 
         # profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
         hash = profiles.pluck(:linkedin_id, :emails_available).to_h
-
         (ids - profiles.pluck(:linkedin_id)).each do |id|
           thread = Thread.new do
             p = request[id]
             emails_available = PiplDb.emails_available(name: p.name, account_id: "#{p.id}@linkedin".freeze) #|| FullContactDb.find(params)
+            hash[p.id] = emails_available
 
-            profile = Profile.create(linkedin_id: p.id, linkedin_url: "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze,
-                           name: p.name, position: p.position, location: p.location, photo: p.photo, emails_available: emails_available)
-
-            hash[profile.linkedin_id] = profile.emails_available
+            new_profiles << {linkedin_id: p.id, linkedin_url: "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze,
+                           name: p.name, position: p.position, location: p.location, photo: p.photo, emails_available: emails_available}
           end
           threads << thread
         end
@@ -67,6 +66,9 @@ class Profile < ActiveRecord::Base
       end
     end
 
+    new_profiles.each do |profile_hash|
+      Profile.create profile_hash
+    end
     logger.warn hash.to_json
     hash.to_json
   end
