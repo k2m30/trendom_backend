@@ -16,7 +16,7 @@ production:
     adapter: postgresql
     encoding: unicode
     database: <%= ENV['RDS_DB_NAME'] %>
-    username: <%= ENV['RDS_USERNAME'] %>
+    username: <%= ENV['RDS_USERNAME'] %> #trendom
     password: <%= ENV['RDS_PASSWORD'] %> #42RXsUfpq
     host: <%= ENV['RDS_HOSTNAME'] %>
     port: <%= ENV['RDS_PORT'] %>
