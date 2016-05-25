@@ -1,6 +1,8 @@
 require_relative 'full_contact_db'
 require_relative 'pipl_db'
 require_relative 'user_request'
+require 'email_verifier'
+require 'google_custom_search_api'
 
 class Profile < ActiveRecord::Base
   has_and_belongs_to_many :users
@@ -29,6 +31,27 @@ class Profile < ActiveRecord::Base
     notes.delete(:emails)
     update(notes: notes, emails: person.emails.map(&:address))
     person
+  end
+
+  def get_emails_from_google
+    company = position.split(' at ')[1]
+    return nil if company.nil?
+    serp = GoogleCustomSearchApi.search("#{company} contacts")
+    domain = serp['items'][0]['displayLink'][/[^\.]+\.[a-z]+$/]
+
+    p [company, position]
+    p serp['items'].map { |i| i['displayLink']}
+
+    first, last = name.split(' ')
+    options = ["#{first}", "#{first}.#{last}", "#{first[0]}#{last}", "#{last}"].map(&:downcase)
+
+    p options
+
+    options.each do |option|
+      email = "#{option}@#{domain}"
+      return email if EmailVerifier.check(email)
+    end
+    return nil
   end
 
   def self.get_emails_available(params)

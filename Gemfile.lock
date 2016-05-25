@@ -36,6 +36,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     arel (6.0.3)
     autoprefixer-rails (6.3.6.1)
       execjs
@@ -52,9 +53,9 @@ GEM
     bootstrap_form (2.3.0)
     builder (3.2.2)
     coderay (1.1.1)
-    coffee-rails (4.0.1)
+    coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
+      railties (>= 4.0.0, < 5.1.x)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -68,6 +69,9 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
+    dnsruby (1.59.2)
+    email_verifier (0.1.0)
+      dnsruby (>= 1.5)
     erubis (2.7.0)
     execjs (2.7.0)
     faker (1.6.3)
@@ -85,6 +89,9 @@ GEM
       plissken
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    google_custom_search_api (2.0.0)
+      addressable
+      httparty
     haml (4.0.7)
       tilt
     haml-rails (0.9.0)
@@ -99,6 +106,9 @@ GEM
       haml (~> 4.0.0)
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -225,12 +235,14 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (~> 3.3.6)
   bootstrap_form
-  coffee-rails (~> 4.0.0)
+  coffee-rails (~> 4.1.0)
   curb
   devise
+  email_verifier
   faker
   font-awesome-rails
   fullcontact
+  google_custom_search_api
   haml-rails (~> 0.9)
   jbuilder (~> 2.0)
   jquery-rails
@@ -238,8 +250,8 @@ DEPENDENCIES
   pg
   piplapis-ruby
   puma
-  rails (>= 4.0)
-  sass-rails (>= 3.2)
+  rails (= 4.2.6)
+  sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
   tail
