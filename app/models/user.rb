@@ -4,7 +4,11 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :trackable, :omniauthable, :omniauth_providers => [:google_oauth2]
   serialize :revealed_ids
-  has_and_belongs_to_many :profiles, uniq: true
+  has_many :lists, dependent: :delete_all
+  has_many :profiles, through: :lists
+  has_many :templates, through: :lists
+
+  after_create :create_lists
 
   def active?
     active = (calls_left > 0 and Time.now < subscription_expires)
@@ -113,5 +117,26 @@ class User < ActiveRecord::Base
         csv << profile.attributes.values_at(*columns)
       end
     end
+  end
+
+  protected
+  def create_lists
+    self.lists.create(name: 'Main', text:
+        %{
+Greetings {First Name},
+
+I came across your profile investigating the Transportation & Logistics industry, where my team and I have built likeminded professionals several projects, specifically bespoke apps and software to tackle problems in Transportation / Supply Chain / Logistics, like fleet and warehouse management, reducing the middleman role in shipping, finding licensed carriers, cargo tracking, coordination and prediction of issues, and route planning. I thought you and {Company} may face some of these challenges too.
+
+One of our recent projects allows shipping companies to identify and assess licensed carriers, reducing middlemen costs from 20% to 2-3%. 29,000 brokers and 17,000 shippers are currently using the app.
+Our Courier Oversight Mobile App allows enhanced tracking, route planning and paperless solutions for startup companies. Since investing in this Magora application, the company has seen 300,000 users (59% daily) and 11,000,000 GB Pounds in revenue generated in over 3 years.
+
+Magora.co.uk develop bespoke b2b apps from scratch, but we are always looking to identify issues that could be solved with software, so that we may help our clients to better manage their Transportation companies, increase sales and earn more money.
+
+Do you have a few minutes either this week or next for a quick call to discuss this further? If so, just reply back here and let me know when the best time for you is.
+
+Thnak you,
+{My Name}
+}
+    )
   end
 end

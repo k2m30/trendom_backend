@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :lists
   resources :profiles, only: [] do
     collection do
       post 'get_emails_available'

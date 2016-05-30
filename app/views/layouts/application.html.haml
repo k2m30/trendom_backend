@@ -13,12 +13,20 @@
         -#.navbar-header
         -#  %a.navbar-brand{:href => "#"}
         -#    %img{alt: 'Trendom.io', :src => "..."}/
-        - if user_signed_in?
-          %ul.nav.navbar-nav.navbar-right
-            %li
-              =link_to destroy_user_session_path, method: :delete do
-                = fa_icon 'sign-out'
-                Sign out
+        .collapse.navbar-collapse
+          - if user_signed_in?
+            %ul.nav.navbar-nav
+              %li
+                =link_to 'Profiles', user_path(current_user)
+              %li
+                =link_to 'Lists', lists_path
+              %li
+                =link_to 'Settings'
+            %ul.nav.navbar-nav.navbar-right
+              %li
+                =link_to destroy_user_session_path, method: :delete do
+                  = fa_icon 'sign-out'
+                  Sign out
 
     .container-fluid
       -flash.each do |name, msg|

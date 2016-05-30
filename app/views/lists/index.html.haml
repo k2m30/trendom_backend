@@ -1,0 +1,23 @@
+%h1 Listing lists
+
+%table.table
+  %thead
+    %tr
+      %th List
+      %th Template
+      %th
+      %th
+      %th
+
+  %tbody
+    - @lists.each do |list|
+      %tr
+        %td= link_to list.name, edit_list_path(list)
+        %td= link_to list.text.gsub("\n", '<br>').html_safe, edit_list_path(list)
+        %td
+          =link_to list, :method => :delete, :data => { :confirm => 'Are you sure?' } do
+            = fa_icon 'remove'
+
+%br
+
+= link_to 'New List', new_list_path
