@@ -34,21 +34,32 @@ class Profile < ActiveRecord::Base
   end
 
   def get_emails_from_google
-    company = position.split(' at ')[1]
-    return nil if company.nil?
-    serp = GoogleCustomSearchApi.search("#{company} contacts")
-    domain = serp['items'][0]['displayLink'][/[^\.]+\.[a-z]+$/]
 
-    p [company, position]
-    p serp['items'].map { |i| i['displayLink']}
+    EmailVerifier.config do |config|
+      config.verifier_email ||= 'team@trendom.io'
+    end
+
+    company = position.split(' at ')[1][/.[a-z\.\- &]+/]
+    return nil if company.nil?
+    company = company[/.[a-zA-Z\.\- &]+/]
+
+    rejected_list = %w(linkedin twitter wikipedia apple facebook)
+    query = "#{company} contacts"
+    serp = GoogleCustomSearchApi.search(query, page: 1, googlehost: 'google.co.uk')
+    domain_options = serp['items'].map { |i| i['displayLink']}.reject{|i| rejected_list.any? {|a| i.include? a}}
+    domain = domain_options.first[/[^\.]+\.[a-z]+$/]
+
+    p [query, company, position]
+    p domain_options
 
     first, last = name.split(' ')
-    options = ["#{first}", "#{first}.#{last}", "#{first[0]}#{last}", "#{last}"].map(&:downcase)
+    options = %W(#{first} #{first}.#{last} #{first[0]}#{last} #{last}).map(&:downcase)
 
     p options
 
     options.each do |option|
       email = "#{option}@#{domain}"
+      p email
       return email if EmailVerifier.check(email)
     end
     return nil

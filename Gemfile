@@ -30,7 +30,7 @@ gem 'puma'
 gem 'piplapis-ruby'
 gem 'fullcontact'
 gem 'tail'
-gem 'email_verifier'
+gem 'email_verifier', require: false
 gem 'google_custom_search_api'
 # gem 'doorkeeper'
 
