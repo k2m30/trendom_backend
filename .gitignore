@@ -12,11 +12,7 @@
 /tmp
 
 /public/assets
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+public/_table.html
 
 # RubyMine config files
 .idea

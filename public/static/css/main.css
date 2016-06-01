@@ -95,13 +95,13 @@ p{
 	padding:0 28px;
 	border: solid 1px #15181f;
 	font-size:20px;
-	line-height:50px;	
+	line-height:50px;
 }
 	.ext_button > img{
 		margin-right:8px;
 		vertical-align:middle;
 	}
-	
+
 .trans_button{
 	display:inline-block;
 	width:276px;
@@ -111,7 +111,7 @@ p{
 	border: solid 1px #fff;
 	text-align:center;
 	font-size:20px;
-	line-height:48px;	
+	line-height:48px;
 }
 	.trans_button > img{
 		position:relative;
@@ -150,7 +150,7 @@ p{
 			margin-bottom:20px;
 		}
 		.search_row .ext_button{
-			
+
 		}
 	.choose_row .big_img_container{
 		padding-bottom:50px;
@@ -176,7 +176,7 @@ p{
 }
 .should_list_wrap{
 	margin-top:80px;
-}		
+}
 	.should_list{
 		margin-top: 60px;
 	}
@@ -206,7 +206,7 @@ p{
 						font-size:17px;
 						line-height:24px;
 					}
-		
+
 
 #how_section{
 	position:relative;
@@ -269,7 +269,10 @@ p{
 				font-size:20px;
 				line-height:100%;
 			}
-			
+            .icon{
+                background-color: white;
+            }
+
 #start_section{
 	position:relative;
 	margin-top:130px;
@@ -291,16 +294,16 @@ p{
 		border:none;
 		color:#fff;
 	}
-	
+
 #footer_section{
 	margin-top:70px;
 }
-		
+
 @media (min-width: 1200px){
 	.title_left_padding{
 		padding-left:150px;
 	}
-	
+
 	.search_row .title_text{
 		padding-top:85px;
 	}
@@ -324,7 +327,7 @@ p{
 	.should_list .name{
 		white-space:nowrap;
 	}
-	
+
 	#big_img_1_wrap{
 		position:relative;
 		left:-9px;
