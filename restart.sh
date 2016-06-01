@@ -7,3 +7,4 @@ git pull
 bundle
 rake assets:precompile
 bundle exec puma -e production -d -b unix:///home/deployer/trendom.sock restart
+chmod +x restart.sh
