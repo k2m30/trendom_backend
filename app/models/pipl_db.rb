@@ -23,7 +23,7 @@ class PiplDb
     person = Pipl::Person.new
     person.add_field Pipl::Name.new(first: first, last: last)
     person.add_field Pipl::UserID.new content: person_hash[:account_id]
-    Pipl::client.search person: person, match_requirements: match_requirements, api_key: 'BUSINESS-effn6ozaifex6jkmxzcenj0i'.freeze
+    Pipl::client.search person: person, match_requirements: match_requirements, api_key: ENV['PIPL'].freeze
   end
 
   def self.extract(full_name)
