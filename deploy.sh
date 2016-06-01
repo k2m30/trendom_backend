@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+git push
 ssh deployer@trendom.io <<'ENDSSH'
 cd trendom_backend
 git stash
