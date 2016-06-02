@@ -1,5 +1,5 @@
 class AddRevealedIdsToUser < ActiveRecord::Migration
   def change
-    add_column :users, :revealed_ids, :string, default: []
+    add_column :users, :revealed_ids, :text, default: []
   end
 end

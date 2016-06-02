@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :lists
   resources :profiles, only: [] do
     collection do
       post 'get_emails_available'
@@ -25,9 +24,11 @@ Rails.application.routes.draw do
     get 'oauth_callback_controller/google_oauth2'
   end
 
+  resources :email_templates, only: [:index, :update, :destroy]
+
   # post 'download', to: 'users#download'
-  get 'test/add_profiles', to: 'tests#add_profiles'
-  get 'test/get_emails_available', to: 'tests#get_emails_available'
+  # get 'test/add_profiles', to: 'tests#add_profiles'
+  # get 'test/get_emails_available', to: 'tests#get_emails_available'
 
   post '/people/find', to: 'profiles#get_emails_available'
 

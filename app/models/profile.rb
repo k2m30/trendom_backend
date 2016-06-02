@@ -5,8 +5,7 @@ require 'email_verifier'
 require 'google_custom_search_api'
 
 class Profile < ActiveRecord::Base
-  has_and_belongs_to_many :lists
-  has_many :users, through: :lists
+  has_and_belongs_to_many :users
   serialize :notes, Hash
   serialize :emails
 
