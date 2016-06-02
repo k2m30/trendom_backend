@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'campaigns/new'
+
+  get 'campaigns/destroy'
+
   resources :profiles, only: [] do
     collection do
       post 'get_emails_available'
@@ -25,6 +29,11 @@ Rails.application.routes.draw do
   end
 
   resources :email_templates, only: [:index, :update, :destroy]
+  resource :campaigns, only: [:create, :update, :destroy, :show] do
+    collection do
+      post 'remove_profile'
+    end
+  end
 
   # post 'download', to: 'users#download'
   # get 'test/add_profiles', to: 'tests#add_profiles'

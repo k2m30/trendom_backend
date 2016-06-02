@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602122636) do
+ActiveRecord::Schema.define(version: 20160602141509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "sent",         default: false
+    t.datetime "date_sent"
+    t.text     "profiles_ids", default: "--- []\n"
+    t.integer  "user_id"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
 
   create_table "email_templates", force: :cascade do |t|
     t.string   "name"
@@ -82,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160602122636) do
     t.integer  "calls_left",           default: 0
     t.float    "progress",             default: 0.0
     t.text     "revealed_ids",         default: "--- []\n"
+    t.text     "campaigns_sent_ids",   default: "--- []\n"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -9,6 +9,16 @@ class Profile < ActiveRecord::Base
   serialize :notes, Hash
   serialize :emails
 
+  def apply_template(email_template_id)
+    first, last = split_name
+    email_template = EmailTemplate.find(email_template_id)
+    email_template.text.gsub('{First Name}', first).gsub('{Last Name}', last)
+  end
+
+  def split_name
+    name.split(' ')
+  end
+
   def get_emails_and_notes
     if Rails.env.development?
       sleep 2

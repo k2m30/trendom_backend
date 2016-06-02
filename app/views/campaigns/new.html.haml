@@ -1,0 +1,27 @@
+- filtered_ids = params[:filtered_ids] || []
+.row
+  .col-md-6
+    %table.table
+      %tbody
+        -@profiles.each do |profile|
+          %tr
+            %td
+              =link_to campaigns_new_path(filtered_ids: filtered_ids + [profile.id], email_template_id: params[:email_template_id]) do
+                = fa_icon 'remove'
+            %td
+              =profile.name
+            %td
+              =profile.position
+            %td
+              =profile.emails.first
+  .col-md-6
+    .row
+      .col-md-6
+        %p
+          %strong Choose template
+        =select_tag :email_template, options_from_collection_for_select(@email_templates, 'id', 'name', params[:email_template_id] || @email_templates.first.id), class: 'form-control', id: 'template', 'data-url': campaigns_new_path(filtered_ids: filtered_ids, email_template_id: params[:email_template_id])
+
+    .row
+      .col-md-12
+        - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
+        = profile.apply_template(params[:email_template_id] || 1).gsub("\n",'<br/>').html_safe

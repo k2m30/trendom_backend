@@ -1,10 +1,13 @@
 require 'csv'
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :trackable, :omniauthable, omniauth_providers: [:google_oauth2]
+
   serialize :revealed_ids
+  serialize :campaigns_sent_ids
+
   has_many :email_templates, dependent: :delete_all
+  has_many :campaigns, dependent: :delete_all
+
   has_and_belongs_to_many :profiles
 
   after_create :create_email_templates
@@ -21,6 +24,11 @@ class User < ActiveRecord::Base
 
   def profiles_with_revealed_emails
     profiles.where(id: revealed_ids)
+  end
+
+  def profiles_not_contacted
+    ids = campaigns.where(sent: true).pluck(:profiles_ids)
+    profiles.where.not(id: ids)
   end
 
   def profiles_with_hidden_emails

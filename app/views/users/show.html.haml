@@ -99,15 +99,21 @@
               =p.facebook_url
 
 .row
-  .col-md-8
-  .col-md-4
+  .col-md-7
+  .col-md-5
     -if @user.active?
+      -if @user.profiles_with_revealed_emails.size > 0
+        = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
+          Download
+          = fa_icon 'download'
+        = link_to campaigns_new_path, class: 'btn btn-default', id: 'new_campaign' do
+          Create new campaign
+          = fa_icon 'download'
+
+
       - if @user.profiles_with_hidden_emails.size > 0
         = link_to '#reveal', class: 'btn btn-info', id: 'reveal', data: reveal_emails_users_path do
           Reveal emails
-          = fa_icon 'download'
-        = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download', style: 'display:none' do
-          Download
           = fa_icon 'download'
       - else
         = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
@@ -117,7 +123,8 @@
       = link_to edit_user_path(@user), class: 'btn btn-info' do
         Choose subscription plan to download prospects
         = fa_icon 'download'
-
+.row
+  %hr
 .progress-window{style: 'display:none'}
   .row
     .col-xs-12
