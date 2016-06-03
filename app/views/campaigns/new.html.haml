@@ -1,4 +1,6 @@
-- filtered_ids = params[:filtered_ids] || []
+- fi = params[:fi] || []
+- campaign_name = params[:campaign_name] || "Email campaign - #{Time.now.to_formatted_s(:short)}"
+- email_template_id = params[:email_template_id] || @email_templates.first.id
 .row
   .col-md-6
     %table.table
@@ -6,7 +8,7 @@
         -@profiles.each do |profile|
           %tr
             %td
-              =link_to campaigns_new_path(filtered_ids: filtered_ids + [profile.id], email_template_id: params[:email_template_id]) do
+              =link_to campaigns_new_path(fi: fi + [profile.id], email_template_id: params[:email_template_id]) do
                 = fa_icon 'remove'
             %td
               =profile.name
@@ -14,14 +16,21 @@
               =profile.position
             %td
               =profile.emails.first
+
   .col-md-6
     .row
       .col-md-6
         %p
           %strong Choose template
-        =select_tag :email_template, options_from_collection_for_select(@email_templates, 'id', 'name', params[:email_template_id] || @email_templates.first.id), class: 'form-control', id: 'template', 'data-url': campaigns_new_path(filtered_ids: filtered_ids, email_template_id: params[:email_template_id])
+        =select_tag :email_template, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id), class: 'form-control', id: 'template', 'data-url': campaigns_new_path(fi: fi, email_template_id: params[:email_template_id])
 
     .row
       .col-md-12
         - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
         = profile.apply_template(params[:email_template_id] || 1).gsub("\n",'<br/>').html_safe
+    .row
+      %hr
+      .col-md-6
+        =link_to 'Create campaign and send later', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: false, campaign_name: campaign_name), method: :post, class: 'btn btn-default'
+      .col-md-6
+        =link_to 'Create campaign and send away now', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: true, campaign_name: campaign_name), method: :post, class: 'btn btn-info'

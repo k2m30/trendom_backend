@@ -47,7 +47,7 @@
         %th
           Profile
       %tbody
-        - @user.profiles_with_revealed_emails.each do |p|
+        - @user.profiles_not_in_campaigns.each do |p|
           %tr
             %td
               =link_to remove_profile_users_path(id: p.id), method: :post do

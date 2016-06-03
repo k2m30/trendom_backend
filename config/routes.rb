@@ -29,10 +29,7 @@ Rails.application.routes.draw do
   end
 
   resources :email_templates, only: [:index, :update, :destroy]
-  resource :campaigns, only: [:create, :update, :destroy, :show] do
-    collection do
-      post 'remove_profile'
-    end
+  resources :campaigns, only: [:create, :update, :destroy, :show] do
   end
 
   # post 'download', to: 'users#download'

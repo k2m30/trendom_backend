@@ -18,12 +18,13 @@ ActiveRecord::Schema.define(version: 20160602141509) do
 
   create_table "campaigns", force: :cascade do |t|
     t.string   "name"
-    t.boolean  "sent",         default: false
+    t.boolean  "sent",              default: false
     t.datetime "date_sent"
-    t.text     "profiles_ids", default: "--- []\n"
+    t.text     "profiles_ids",      default: "--- []\n"
+    t.integer  "email_template_id",                      null: false
     t.integer  "user_id"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   create_table "email_templates", force: :cascade do |t|

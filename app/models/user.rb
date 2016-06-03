@@ -28,6 +28,11 @@ class User < ActiveRecord::Base
 
   def profiles_not_contacted
     ids = campaigns.where(sent: true).pluck(:profiles_ids)
+    profiles_with_revealed_emails.where.not(id: ids)
+  end
+
+  def profiles_not_in_campaigns
+    ids = campaigns.pluck(:profiles_ids)
     profiles.where.not(id: ids)
   end
 

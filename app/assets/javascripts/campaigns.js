@@ -16,4 +16,6 @@ $(document).on('ready page:load', function () {
 
         Turbolinks.visit(new_url);
     });
+
+
 });
