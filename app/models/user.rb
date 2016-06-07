@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
     profiles.where(id: revealed_ids)
   end
 
+  def profiles_with_hidden_emails
+    profiles.where.not(id: revealed_ids)
+  end
+
   def profiles_not_contacted
     ids = campaigns.where(sent: true).pluck(:profiles_ids)
     profiles_with_revealed_emails.where.not(id: ids)
@@ -33,11 +37,7 @@ class User < ActiveRecord::Base
 
   def profiles_not_in_campaigns
     ids = campaigns.pluck(:profiles_ids)
-    profiles.where.not(id: ids)
-  end
-
-  def profiles_with_hidden_emails
-    profiles.where.not(id: revealed_ids)
+    profiles.where.not(id: ids.flatten)
   end
 
   def download
@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
   def reveal_emails
     new_revealed = revealed_ids
     hidden_emails_size = profiles_with_hidden_emails.size
-    self.update(progress: 0.0) if hidden_emails_size > 0
+    self.update(progress: 0.0) #if hidden_emails_size > 0
     profiles_with_hidden_emails.each_with_index do |profile, i|
       profile.get_emails_and_notes
       self.update(progress: ((i+1)/hidden_emails_size.to_f).round(4)*100)

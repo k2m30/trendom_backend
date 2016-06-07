@@ -20,8 +20,8 @@ class Profile < ActiveRecord::Base
   end
 
   def get_emails_and_notes
-    if Rails.env.development?
-      sleep 2
+    if Rails.env.development? or Rails.env.test?
+      sleep 2 if Rails.env.development?
       update(notes: {}, emails: [Faker::Internet.email]) if self.emails.empty?
       return
     end

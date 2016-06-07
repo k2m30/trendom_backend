@@ -1,7 +1,7 @@
 %h1
   = @user.card_holder_name || @user.name
 
-.row
+.row#user
   .col-md-2
     %img{src: @user.image, width: '100px'}
   .col-md-10
@@ -31,6 +31,7 @@
           = @user.subscription_expires.nil? ? Time.now.to_formatted_s(:short) : @user.subscription_expires.to_formatted_s(:short)
 .row
   .col-md-12
+    %h4 Profiles
     %table.table
       %thead
         %th
@@ -47,11 +48,9 @@
         %th
           Profile
       %tbody
-        - @user.profiles_not_in_campaigns.each do |p|
-          %tr
+        - (@user.profiles_not_in_campaigns - @user.profiles_with_hidden_emails).each do |p|
+          %tr.visible-emails
             %td
-              =link_to remove_profile_users_path(id: p.id), method: :post do
-                = fa_icon 'remove'
             %td
               =p.name
             %td
@@ -73,9 +72,9 @@
             %td
               =p.facebook_url
         - @user.profiles_with_hidden_emails.each do |p|
-          %tr
+          %tr.hidden-emails
             %td
-              =link_to remove_profile_users_path(id: p.id), method: :post do
+              =link_to remove_profile_users_path(id: p.id), method: :post, class: 'remove-profile' do
                 = fa_icon 'remove'
             %td
               =p.name
@@ -98,15 +97,15 @@
             %td
               =p.facebook_url
 
-.row
+.row#buttons
   .col-md-7
-  .col-md-5
+  .col-md-5(data-no-turbolink)
     -if @user.active?
       -if @user.profiles_with_revealed_emails.size > 0
         = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
           Download
           = fa_icon 'download'
-        = link_to campaigns_new_path, class: 'btn btn-default', id: 'new_campaign' do
+        = link_to new_campaign_path, class: 'btn btn-default', id: 'new_campaign' do
           Create new campaign
           = fa_icon 'download'
 
@@ -114,10 +113,6 @@
       - if @user.profiles_with_hidden_emails.size > 0
         = link_to '#reveal', class: 'btn btn-info', id: 'reveal', data: reveal_emails_users_path do
           Reveal emails
-          = fa_icon 'download'
-      - else
-        = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
-          Download
           = fa_icon 'download'
     -else
       = link_to edit_user_path(@user), class: 'btn btn-info' do

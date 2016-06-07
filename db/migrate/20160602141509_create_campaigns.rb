@@ -5,6 +5,7 @@ class CreateCampaigns < ActiveRecord::Migration
       t.boolean :sent, default: false
       t.datetime :date_sent
       t.text :profiles_ids, default: []
+      t.float :progress, default: 0.0
       t.integer :email_template_id, null: false
 
       t.belongs_to :user

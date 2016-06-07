@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
-
-  get 'campaigns/new'
-
-  get 'campaigns/destroy'
+  root to: 'users#index'
 
   resources :profiles, only: [] do
     collection do
@@ -10,11 +7,12 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'home', to: 'users#index', as: 'user_root'
+
+
   devise_for :users, controllers: {omniauth_callbacks: 'users/oauth_callback'}
 
-  resources :users, only: [:show, :edit, :update] do
-    member do
-    end
+  resources :users, only: [:edit, :update, :index], path: :home do
     collection do
       post 'add_profiles'
       post 'remove_profile'
@@ -22,25 +20,21 @@ Rails.application.routes.draw do
       get 'download'
       get 'progress'
       get 'reveal_emails'
+      get 'test'
     end
   end
+
   namespace :users do
     get 'oauth_callback_controller/google_oauth2'
   end
 
   resources :email_templates, only: [:index, :update, :destroy]
-  resources :campaigns, only: [:create, :update, :destroy, :show] do
-  end
-
-  # post 'download', to: 'users#download'
-  # get 'test/add_profiles', to: 'tests#add_profiles'
-  # get 'test/get_emails_available', to: 'tests#get_emails_available'
+  resources :campaigns
 
   post '/people/find', to: 'profiles#get_emails_available'
 
   post 'purchase', to: 'purchases#index'
   # get 'purchase', to: 'purchases#index'
 
-  root 'users#show'
   mount Tail::Engine, at: '/tail'
 end

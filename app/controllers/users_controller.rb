@@ -1,13 +1,18 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:add_profiles] #unless Rails.env.development?
+  before_action :authenticate_user!, except: [:add_profiles, :test] #unless Rails.env.development?
   before_action :set_user
   skip_before_filter :verify_authenticity_token, only: [:download, :add_profiles]
 
-  def show
+  def index
     @user.active?
   end
 
   def edit
+  end
+
+  def test
+    sleep 1
+    render plain: '1'
   end
 
   def update
@@ -16,14 +21,13 @@ class UsersController < ApplicationController
   end
 
   def choose_plan
-
   end
 
   def remove_profile
     profile = Profile.find(params[:id])
     @user.profiles.delete(profile) unless profile.nil?
 
-    redirect_to user_path(@user)
+    redirect_to user_root_path
   end
 
   def add_profiles
@@ -47,6 +51,7 @@ class UsersController < ApplicationController
   end
 
   def progress
+    sleep 1
     render text: @user.progress.round(2)
   end
 

@@ -1,7 +1,4 @@
-p Profile.count
 User.first.profiles.delete_all
-p Profile.count
-
 20.times do
   emails = []
   rand(1..6).times do

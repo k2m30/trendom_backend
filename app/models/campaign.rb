@@ -7,4 +7,8 @@ class Campaign < ActiveRecord::Base
   def send_campaign
 
   end
+
+  def profiles
+    Profile.where(id: profiles_ids)
+  end
 end

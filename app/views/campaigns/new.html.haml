@@ -1,14 +1,14 @@
 - fi = params[:fi] || []
-- campaign_name = params[:campaign_name] || "Email campaign - #{Time.now.to_formatted_s(:short)}"
+- campaign_name = params[:campaign_name] || "Email campaign, #{Time.now.to_formatted_s(:short)}, #{@profiles.size - fi.size} emails"
 - email_template_id = params[:email_template_id] || @email_templates.first.id
 .row
   .col-md-6
     %table.table
       %tbody
         -@profiles.each do |profile|
-          %tr
+          %tr.profile
             %td
-              =link_to campaigns_new_path(fi: fi + [profile.id], email_template_id: params[:email_template_id]) do
+              =link_to new_campaign_path(fi: fi + [profile.id], email_template_id: params[:email_template_id]), class: 'remove-profile' do
                 = fa_icon 'remove'
             %td
               =profile.name
@@ -22,15 +22,16 @@
       .col-md-6
         %p
           %strong Choose template
-        =select_tag :email_template, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id), class: 'form-control', id: 'template', 'data-url': campaigns_new_path(fi: fi, email_template_id: params[:email_template_id])
+        =select_tag :email_template, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id), class: 'form-control', 'data-url': new_campaign_path(fi: fi, email_template_id: params[:email_template_id]), id: 'select-template'
 
-    .row
-      .col-md-12
-        - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
-        = profile.apply_template(params[:email_template_id] || 1).gsub("\n",'<br/>').html_safe
-    .row
-      %hr
-      .col-md-6
-        =link_to 'Create campaign and send later', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: false, campaign_name: campaign_name), method: :post, class: 'btn btn-default'
-      .col-md-6
-        =link_to 'Create campaign and send away now', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: true, campaign_name: campaign_name), method: :post, class: 'btn btn-info'
+    - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
+    - if profile.present?
+      .row
+        .col-md-12#template-text
+          = profile.apply_template(params[:email_template_id] || current_user.email_templates.first.id).gsub("\n",'<br/>').html_safe
+      .row
+        %hr
+        .col-md-6
+          =link_to 'Create campaign and send later', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: false, campaign_name: campaign_name), method: :post, class: 'btn btn-default', id: 'send-later'
+        .col-md-6
+          =link_to 'Create campaign and send away now', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: true, campaign_name: campaign_name), method: :post, class: 'btn btn-info', id: 'send-now'

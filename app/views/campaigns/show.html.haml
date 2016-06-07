@@ -1,1 +1,5 @@
 = @campaign.name
+
+-@campaign.profiles.each do |profile|
+  %p
+    =profile.name

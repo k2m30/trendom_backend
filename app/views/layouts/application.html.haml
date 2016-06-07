@@ -17,6 +17,8 @@
           - if user_signed_in?
             %ul.nav.navbar-nav
               %li
+                =link_to 'Campaigns', campaigns_path
+              %li
                 =link_to 'Profiles', user_path(current_user)
               %li
                 =link_to 'Email templates', email_templates_path

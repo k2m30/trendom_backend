@@ -11,6 +11,11 @@ development:
   database: trendom
   password: q
 
+test:
+  <<: *default
+  database: trendom_test
+  password: q
+
 production:
     <<: *default
     adapter: postgresql
@@ -18,5 +23,3 @@ production:
     database: <%= ENV['RDS_DB_NAME'] %>
     username: <%= ENV['RDS_USERNAME'] %> #trendom
     password: <%= ENV['RDS_PASSWORD'] %> #42RXsUfpq
-    host: <%= ENV['RDS_HOSTNAME'] %>
-    port: <%= ENV['RDS_PORT'] %>

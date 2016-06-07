@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20160602141509) do
     t.boolean  "sent",              default: false
     t.datetime "date_sent"
     t.text     "profiles_ids",      default: "--- []\n"
+    t.float    "progress",          default: 0.0
     t.integer  "email_template_id",                      null: false
     t.integer  "user_id"
     t.datetime "created_at",                             null: false

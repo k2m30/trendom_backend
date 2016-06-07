@@ -37,9 +37,15 @@ gem 'google_custom_search_api'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'faker'
   gem 'haml'
   gem 'guard-haml'
+end
+
+group :development, :test do
+  gem 'capybara'
+  gem 'rspec-rails'
+  gem 'faker'
+  gem 'spring-commands-rspec', git: 'https://github.com/thewoolleyman/spring-commands-rspec.git'
 end
 
 #authentication

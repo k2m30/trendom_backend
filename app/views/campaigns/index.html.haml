@@ -1,0 +1,18 @@
+.row
+  .col-md-12
+    %h4
+      Campaigns
+      %a (hide)
+    %table.table
+      %thead
+      %tbody
+        -@current_user.campaigns.each do |campaign|
+          %tr
+            %td
+              = link_to campaign.name, campaign
+            %td
+              =campaign.sent? ? 'Sent' : 'Pending'
+            %td
+              =campaign.progress if campaign.progress > 0
+            %td
+              =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-info'

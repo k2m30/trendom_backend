@@ -1,4 +1,4 @@
-jQuery ->
+$(document).on 'ready page:load', ->
   $('#reveal').click ->
     $('#reveal').fadeOut()
     $('.progress-window').fadeIn()
@@ -6,7 +6,6 @@ jQuery ->
       url: $('#reveal').attr('data')
       success: (progress) ->
         $('.progress-window').fadeOut()
-        $('#download').fadeIn()
         return
       error: (err) ->
         console.log(err)
@@ -14,12 +13,11 @@ jQuery ->
 
     interval = setInterval((->
       $.ajax
-        url: '/users/progress'
+        url: '/home/progress'
         success: (progress) ->
-          if progress != 0
+          if parseFloat(progress) != 0.0
             $('.progress-bar').css('width', progress + '%').text progress + '%'
-#          $('.progress-status').text progress
-          if parseFloat(progress) >= 100
+          if parseFloat(progress) >= 100.0
             clearInterval interval
             window.location.reload(true)
           return
