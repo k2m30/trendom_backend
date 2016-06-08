@@ -13,7 +13,7 @@ require 'capybara/rails'
 
 def login
   OmniAuth.config.test_mode = true
-  hash = OmniAuth::AuthHash.new(info: {email: 'mikhail.chuprynski@gmail.com', name: 'Mikhail Chuprynski'})
+  hash = OmniAuth::AuthHash.new(info: {email: 'mikhail.chuprynski@gmail.com', name: 'Mikhail Chuprynski'}, credentials: {token: 'aaa', expires_at: 12345678})
   OmniAuth.config.mock_auth[:google_oauth2] = hash
 
   visit new_user_session_path
@@ -26,11 +26,9 @@ def create_campaign(now = false, delete_profiles = 0)
     all('a.remove-profile')[1].click
   end
 
-  if now
-    find('#send-now').click
-  else
-    find('#send-later').click
-  end
+  find('#_send_later').click if now
+  find('#send').click
+
 end
 
 describe 'Campaign', type: :feature do
@@ -132,7 +130,10 @@ describe 'Campaign', type: :feature do
   end
 
   it 'can send campaigns later' do
-
+    create_campaign(false)
+    visit campaigns_path
+    find('.send-out').click
+    expect(user.campaigns.first.progress).not_to be 0.0
   end
 
 end

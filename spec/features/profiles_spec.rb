@@ -4,7 +4,7 @@ require 'capybara/rails'
 
 def login
   OmniAuth.config.test_mode = true
-  hash = OmniAuth::AuthHash.new(info: {email: 'mikhail.chuprynski@gmail.com', name: 'Mikhail Chuprynski'})
+  hash = OmniAuth::AuthHash.new(info: {email: 'mikhail.chuprynski@gmail.com', name: 'Mikhail Chuprynski'}, credentials: {token: 'aaa', expires_at: 12345678})
   OmniAuth.config.mock_auth[:google_oauth2] = hash
 
   visit new_user_session_path
@@ -66,5 +66,5 @@ describe 'Profile manipulation' do
     expect(all('.hidden-emails').size).to be 0
   end
 
-  
+
 end

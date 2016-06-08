@@ -1,6 +1,7 @@
 - fi = params[:fi] || []
-- campaign_name = params[:campaign_name] || "Email campaign, #{Time.now.to_formatted_s(:short)}, #{@profiles.size - fi.size} emails"
+- campaign_name = params[:name] || "Email campaign, #{Time.now.to_formatted_s(:short)}, #{@profiles.size} emails"
 - email_template_id = params[:email_template_id] || @email_templates.first.id
+- subject = params[:subject] || 'Advice needed'
 .row
   .col-md-6
     %table.table
@@ -18,20 +19,31 @@
               =profile.emails.first
 
   .col-md-6
-    .row
-      .col-md-6
-        %p
-          %strong Choose template
-        =select_tag :email_template, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id), class: 'form-control', 'data-url': new_campaign_path(fi: fi, email_template_id: params[:email_template_id]), id: 'select-template'
-
-    - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
-    - if profile.present?
-      .row
-        .col-md-12#template-text
-          = profile.apply_template(params[:email_template_id] || current_user.email_templates.first.id).gsub("\n",'<br/>').html_safe
-      .row
-        %hr
-        .col-md-6
-          =link_to 'Create campaign and send later', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: false, campaign_name: campaign_name), method: :post, class: 'btn btn-default', id: 'send-later'
-        .col-md-6
-          =link_to 'Create campaign and send away now', campaigns_path(fi: fi, email_template_id: email_template_id, send_now: true, campaign_name: campaign_name), method: :post, class: 'btn btn-info', id: 'send-now'
+    = bootstrap_form_tag url: campaigns_path do |f|
+      - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
+      - if profile.present?
+        .row
+          .col-md-6
+            = f.text_field :name, value: campaign_name, label: 'Campaign name'
+        .row
+          .col-md-6
+            =f.select :email_template_id, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id),{label: 'Choose template'}, {'data-url': new_campaign_path(fi: fi, email_template_id: params[:email_template_id], name: campaign_name, subject: subject)}
+        .row
+          .col-md-6
+            = f.text_field :subject, value: subject
+        .row
+          .col-md-12#template-text
+            = profile.apply_template(email_template_id).gsub("\n",'<br/>').html_safe
+        .row
+          %hr
+          .col-md-6
+            =f.hidden_field :hidden, value: params.to_json
+            =f.check_box :send_later, label: 'Send later', checked: true
+          .col-md-6
+            =f.submit 'Create campaign', class: 'btn btn-info', id: 'send'
+.row
+  %br
+.row
+  %br
+.row
+  %br

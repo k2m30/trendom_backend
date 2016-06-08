@@ -97,6 +97,7 @@ class User < ActiveRecord::Base
                          uid: access_token[:uid])
     end
     user.update_with_omniauth(access_token) if user.image.nil?
+    user.update(tkn: access_token.credentials.token, expires_at: access_token.credentials.expires_at)
     user
   end
 

@@ -2,8 +2,7 @@
   .col-md-12
     %h4
       Campaigns
-      %a (hide)
-    %table.table
+    %table.table.table-condensed
       %thead
       %tbody
         -@current_user.campaigns.each do |campaign|
@@ -15,4 +14,5 @@
             %td
               =campaign.progress if campaign.progress > 0
             %td
-              =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-info'
+              =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-default'
+              =link_to 'Send out', send_campaign_path(campaign), method: :post, class: 'btn btn-info send-out', style: 'display:none' if campaign.sent?

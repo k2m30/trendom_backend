@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602141509) do
+ActiveRecord::Schema.define(version: 20160608082958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20160602141509) do
     t.integer  "user_id"
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.string   "subject"
   end
 
   create_table "email_templates", force: :cascade do |t|
@@ -95,6 +96,8 @@ ActiveRecord::Schema.define(version: 20160602141509) do
     t.float    "progress",             default: 0.0
     t.text     "revealed_ids",         default: "--- []\n"
     t.text     "campaigns_sent_ids",   default: "--- []\n"
+    t.string   "tkn"
+    t.integer  "expires_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

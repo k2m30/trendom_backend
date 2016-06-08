@@ -29,7 +29,11 @@ Rails.application.routes.draw do
   end
 
   resources :email_templates, only: [:index, :update, :destroy]
-  resources :campaigns
+  resources :campaigns do
+    member do
+      post 'send', to: 'campaigns#send_out'
+    end
+  end
 
   post '/people/find', to: 'profiles#get_emails_available'
 

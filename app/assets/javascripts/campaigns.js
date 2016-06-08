@@ -1,5 +1,5 @@
 $(document).on('ready page:load', function () {
-    $('#select-template').change(function () {
+    $('#_email_template_id').change(function () {
         var value = $(this).find('option:selected').val();
         var current_url = $(this).attr('data-url');
         var new_url;
@@ -15,5 +15,15 @@ $(document).on('ready page:load', function () {
         Turbolinks.visit(new_url);
     });
 
+    $("#_send_later").click(function () {
+        console.log($(this).val());
 
+        if ($(this).prop('checked')) {
+            $("#send").val("Create campaign")
+        }
+        else {
+            $("#send").val("Create campaign and send away now")
+        }
+
+    })
 });
