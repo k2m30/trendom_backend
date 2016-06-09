@@ -1,3 +1,5 @@
+require 'resque/server'
+
 Rails.application.routes.draw do
   root to: 'users#index'
 
@@ -20,13 +22,18 @@ Rails.application.routes.draw do
       get 'download'
       get 'progress'
       get 'reveal_emails'
-      get 'test'
     end
   end
 
   namespace :users do
     get 'oauth_callback_controller/google_oauth2'
   end
+
+  authenticate :user do
+    mount Resque::Server, at: '/jobs'
+    mount Tail::Engine, at: '/tail'
+  end
+
 
   resources :email_templates, only: [:index, :update, :destroy]
   resources :campaigns do
@@ -39,6 +46,4 @@ Rails.application.routes.draw do
 
   post 'purchase', to: 'purchases#index'
   # get 'purchase', to: 'purchases#index'
-
-  mount Tail::Engine, at: '/tail'
 end

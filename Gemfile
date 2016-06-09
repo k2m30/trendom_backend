@@ -58,5 +58,6 @@ gem 'font-awesome-rails'
 gem 'bootstrap_form'
 gem 'curb'
 gem 'sanitize'
+gem 'resque'
 
 gem 'haml-rails', '~> 0.9'

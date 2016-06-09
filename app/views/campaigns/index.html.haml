@@ -15,4 +15,5 @@
               =campaign.progress if campaign.progress > 0
             %td
               =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-default'
-              =link_to 'Send out', send_campaign_path(campaign), method: :post, class: 'btn btn-info send-out', style: 'display:none' if campaign.sent?
+              - style = campaign.sent? ? 'display:none' : ''
+              =link_to 'Send out', send_campaign_path(campaign), method: :post, class: 'btn btn-info send-out', style: style

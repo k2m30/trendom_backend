@@ -7,23 +7,15 @@ class Campaign < ActiveRecord::Base
   serialize :profiles_ids
 
   def send_out
-    size = profiles.size
-    gmail = Gmail.connect(:xoauth2, 'email@domain.com', user.tkn)
-    profiles.each_with_index do |profile, i|
-      if Rails.env.production?
-        gmail.deliver do
-          to profile.emails.first
-          subject "Having fun in Puerto Rico!"
-          text_part do
-            body profile.apply_template(email_template_id)
-          end
-        end
+    profiles.each do |profile|
+      if Rails.env.test? or Rails.env.development?
+        SendEmailJob.set(queue: 'test').perform_now(profile.id, id, user.email, user.tkn)
       else
-        sleep 0.3
+        SendEmailJob.set(queue: user.name.to_sym).perform_later(profile.id, id, user.email, user.tkn)
       end
-      self.update(progress: ((i+1).to_f/size.to_f*100.0).round(2))
+
     end
-    self.update(sent: true)
+    # sleep 10
   end
 
   def profiles

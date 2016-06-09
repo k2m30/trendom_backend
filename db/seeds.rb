@@ -1,9 +1,8 @@
 User.first.profiles.delete_all
 20.times do
   emails = []
-  rand(1..6).times do
-    emails << Faker::Internet.email
-  end
+  emails << %w(1m@tut.by chuprynski@magora-systems.com chuprynski@magora.co.uk).sample
+
   User.first.profiles.create(name: Faker::Name.name, position: Faker::Name.title << ' at ' << Faker::Company.name,
                              photo: Faker::Internet.url,
                              location: Faker::Address.city << ', ' << Faker::Address.country,
