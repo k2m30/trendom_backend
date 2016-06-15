@@ -24,7 +24,7 @@ class CampaignsController < ApplicationController
                                               name: campaign_params[:name],
                                               email_template_id: current_user.email_templates.find(campaign_params[:email_template_id]).id,
                                               subject: campaign_params[:subject])
-    @campaign.send_out if campaign_params[:send_later] == 0
+    @campaign.send_out if campaign_params[:send_later] == '0'
     render :show
   end
   def send_out

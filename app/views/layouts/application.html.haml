@@ -8,18 +8,23 @@
     = csrf_meta_tags
   %body
     %nav
-    %nav.navbar.navbar-default
+    %nav.navbar.navbar-default.navbar-inverse
       .container-fluid
-        -#.navbar-header
-        -#  %a.navbar-brand{:href => "#"}
-        -#    %img{alt: 'Trendom.io', :src => "..."}/
-        .collapse.navbar-collapse
+        .navbar-header
+          %button.navbar-toggle.collapsed{'aria-expanded': 'false', 'data-target': '#navbar-collapse', 'data-toggle': 'collapse', type: 'button'}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{href: user_root_path}
+            %img{alt: 'Trendom.io', src: image_path('logo.png')}/
+        .collapse.navbar-collapse#navbar-collapse
           - if user_signed_in?
             %ul.nav.navbar-nav
               %li
-                =link_to 'Campaigns', campaigns_path
-              %li
                 =link_to 'Profiles', user_root_path
+              %li
+                =link_to 'Campaigns', campaigns_path
               %li
                 =link_to 'Email templates', email_templates_path
               %li
@@ -33,8 +38,8 @@
     .container-fluid
       -flash.each do |name, msg|
         %div{class: "alert alert-#{name == 'notice' ? 'success' : 'danger'} alert-dismissible", role: 'alert'}
-          %button.close{'aria-label' => 'Close', 'data-dismiss' => 'alert', type: 'button'}
-            %span{'aria-hidden' => 'true'} ×
+          %button.close{'aria-label': 'Close', 'data-dismiss': 'alert', type: 'button'}
+            %span{'aria-hidden': 'true'} ×
           =msg
 
       = yield

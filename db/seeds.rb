@@ -1,5 +1,5 @@
 User.first.profiles.delete_all
-20.times do
+5.times do
   emails = []
   emails << %w(1m@tut.by chuprynski@magora-systems.com chuprynski@magora.co.uk).sample
 

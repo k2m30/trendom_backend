@@ -8,14 +8,12 @@ class Campaign < ActiveRecord::Base
 
   def send_out
     profiles.each do |profile|
-      if Rails.env.test? or Rails.env.development?
-        SendEmailJob.set(queue: 'test').perform_now(profile.id, id, user.email, user.tkn)
+      if Rails.env.test? #or Rails.env.development?
+        SendEmailJob.set(queue: 'test').perform_now(profile.id, id, user.email, user.tkn, user.name)
       else
-        SendEmailJob.set(queue: user.name.to_sym).perform_later(profile.id, id, user.email, user.tkn)
+        SendEmailJob.set(queue: user.name.to_sym).perform_later(profile.id, id, user.email, user.tkn, user.name)
       end
-
     end
-    # sleep 10
   end
 
   def profiles

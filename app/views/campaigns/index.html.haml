@@ -10,9 +10,15 @@
             %td
               = link_to campaign.name, campaign
             %td
-              =campaign.sent? ? 'Sent' : 'Pending'
+              - if campaign.sent?
+                Sent
+              - elsif campaign.progress > 0
+                In progress
+              - else
+                Ready to start
+
             %td
-              =campaign.progress if campaign.progress > 0
+              =campaign.progress.to_s << '%' if campaign.progress > 0
             %td
               =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-default'
               - style = campaign.sent? ? 'display:none' : ''

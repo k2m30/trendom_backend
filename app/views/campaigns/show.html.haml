@@ -1,5 +1,13 @@
-= @campaign.name
+%h3
+  = @campaign.name
 
--@campaign.profiles.each do |profile|
-  %p
-    =profile.name
+%table.table
+  %thead
+  %tbody
+
+    -@campaign.profiles.each do |profile|
+      %tr
+        %td
+          =profile.name
+        %td
+          =profile.position

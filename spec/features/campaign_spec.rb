@@ -23,10 +23,10 @@ end
 def create_campaign(now = false, delete_profiles = 0)
   click_on 'Create new campaign'
   delete_profiles.times do
-    all('a.remove-profile')[1].click
+    all('a.remove-profile')[0].click
   end
 
-  find('#_send_later').click if now
+  uncheck('Send later') if now
   find('#send').click
 
 end
@@ -126,7 +126,10 @@ describe 'Campaign', type: :feature do
   end
 
   it 'can send campaigns now' do
-
+    create_campaign(true)
+    visit campaigns_path
+    sleep 1
+    expect(user.campaigns.first.progress).not_to be 0.0
   end
 
   it 'can send campaigns later' do
