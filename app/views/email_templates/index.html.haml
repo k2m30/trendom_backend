@@ -9,7 +9,7 @@
                 Existing email templates
             - @email_templates.each do |template|
               %li{role: 'presentation', class: template.id == @current_template.id ? 'active' : ''}
-                %a{href: email_templates_path(id: template.id)}
+                %a{href: email_templates_path(email_template_id: template.id), class: 'template'}
                   =template.name
 
       .row
@@ -21,8 +21,8 @@
             %strong
               Create new template
           .btn-group-vertical{'aria-label': 'create', role: 'group'}
-            =link_to 'Create from scratch', '#',class: 'btn btn-default'
-            =link_to 'Clone this one', '#', class: 'btn btn-default'
+            =link_to 'Create from scratch', new_email_template_path, class: 'btn btn-default', id: 'new-template'
+            =link_to 'Clone this one', email_template_clone_path(@current_template), class: 'btn btn-default', id: 'clone-template'
       .row
         .col-md-12
           %hr
@@ -32,7 +32,7 @@
             %strong
               Destroy template
           .btn-group-vertical{'aria-label': 'destroy', role: 'group'}
-            =link_to 'Destroy', '#',class: 'btn btn-default'
+            =link_to 'Destroy', email_template_path(@current_template), class: 'btn btn-default', method: :delete, id: 'delete-template'
 
     .col-md-6
       = bootstrap_form_for(@current_template) do |f|
@@ -40,15 +40,23 @@
         = f.text_area :text, rows: 30
 
 
-        = f.submit 'Save'
-    -#.col-md-3
-      -#%div.pull-right
-      -#  %p
-      -#    %strong
-      -#      New template
-      -#  .btn-group-vertical{"aria-label" => "...", :role => "group"}
-      -#    =link_to 'Create from scratch', '#',class: 'btn btn-default'
-      -#    =link_to 'Clone this one', '#', class: 'btn btn-default'
+        = f.submit 'Save', class: 'btn btn-lg btn-info'
+    .col-md-3
+      .panel.panel-primary
+        .panel-heading
+          %h3.panel-title
+            Hint
+        .panel-body
+          You can use
+          %samp
+            {First Name}, {Last Name}
+          and
+          %samp
+            {Company}
+          placeholders to personalilze your emails.
 - else
-  %p You have no templates, but you can create one!
+  %h3
+    You have no templates, but you can
+    =link_to 'create one', new_email_template_path, id: 'create-one'
+
 

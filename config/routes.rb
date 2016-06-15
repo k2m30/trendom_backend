@@ -11,7 +11,6 @@ Rails.application.routes.draw do
 
   get 'home', to: 'users#index', as: 'user_root'
 
-
   devise_for :users, controllers: {omniauth_callbacks: 'users/oauth_callback'}
 
   resources :users, only: [:edit, :update, :index], path: :home do
@@ -34,8 +33,12 @@ Rails.application.routes.draw do
     mount Tail::Engine, at: '/tail'
   end
 
+  resources :email_templates, only: [:index, :update, :destroy, :new] do
+    get 'clone'
+    member do
+    end
+  end
 
-  resources :email_templates, only: [:index, :update, :destroy]
   resources :campaigns do
     member do
       post 'send', to: 'campaigns#send_out'

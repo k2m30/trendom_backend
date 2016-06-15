@@ -11,12 +11,17 @@ class Profile < ActiveRecord::Base
 
   def apply_template(email_template_id)
     first, last = split_name
+    company = extract_company
     email_template = EmailTemplate.find(email_template_id)
-    email_template.text.gsub('{First Name}', first).gsub('{Last Name}', last)
+    email_template.text.gsub('{First Name}', first).gsub('{Last Name}', last).gsub('{Company}', company)
   end
 
   def split_name
     name.split(' ')
+  end
+
+  def extract_company
+    position.split(' at ').first
   end
 
   def get_emails_and_notes
