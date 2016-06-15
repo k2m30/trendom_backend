@@ -1,25 +1,45 @@
-.row
-  .col-md-12
-    %h4
-      Campaigns
-    %table.table.table-condensed
-      %thead
-      %tbody
-        -@current_user.campaigns.each do |campaign|
-          %tr
-            %td
-              = link_to campaign.name, campaign
-            %td
-              - if campaign.sent?
-                Sent
-              - elsif campaign.progress > 0
-                In progress
-              - else
-                Ready to start
+-if @campaigns.size > 0
+  .row
+    .col-md-12
+      %h3
+        Your campaigns
+  .row
+    .col-md-8
+      %table.table.table-condensed
+        %thead
+          %th Name
+          %th Status
+          %th Template
+          %th Progress
+          %th
+        %tbody
+          -@campaigns.each do |campaign|
+            %tr
+              %td
+                = link_to campaign.name, campaign
+              %td
+                - if campaign.sent?
+                  Sent
+                - elsif campaign.progress > 0
+                  In progress
+                - else
+                  Ready to start
+              %td
+                =campaign.email_template_name
+              %td
+                =campaign.progress.to_s << '%'
+              %td
+                =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-default btn-xs'
+                - style = campaign.sent? ? 'display:none' : ''
+                =link_to 'Send out', send_campaign_path(campaign), method: :post, class: 'btn btn-info btn-xs send-out', style: style
 
-            %td
-              =campaign.progress.to_s << '%' if campaign.progress > 0
-            %td
-              =link_to 'Destroy', campaign, method: :delete, class: 'btn btn-default'
-              - style = campaign.sent? ? 'display:none' : ''
-              =link_to 'Send out', send_campaign_path(campaign), method: :post, class: 'btn btn-info send-out', style: style
+  .row
+    .col-md-12
+      %hr
+  .row
+    .col-md-12
+      =link_to 'Create new campaign', new_campaign_path, class: 'btn btn-default'
+-else
+  %h3
+    You have no campaigns, but you can
+    =link_to 'create one', new_campaign_path, id: 'create-one'

@@ -16,6 +16,10 @@ class Campaign < ActiveRecord::Base
     end
   end
 
+  def email_template_name
+    EmailTemplate.find(email_template_id).name
+  end
+
   def profiles
     Profile.where(id: profiles_ids)
   end

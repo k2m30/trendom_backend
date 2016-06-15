@@ -1,13 +1,55 @@
-%h3
-  = @campaign.name
+.row
+  .col-md-12
+    %h3
+      = @campaign.name
+.row
+  .col-md-8
+    %table.table
+      %thead
+        %th Name
+        %th Position
+        %th Email
+      %tbody
+        -@campaign.profiles.each do |profile|
+          %tr
+            %td
+              =profile.name
+            %td
+              =profile.position
+            %td
+              =profile.emails.first
 
-%table.table
-  %thead
-  %tbody
+.row
+  .col-md-12
+    %h3
+      Example
+.row
+  .col-md-8
+    - profile = @campaign.profiles.sample
+    %table.table.table-bordered
+      %thead
+      %tbody
+        %tr
+          %td
+            From:
+          %td
+            ="#{current_user.name} <#{current_user.email}>"
+        %tr
+          %td
+            To:
+          %td
+            = profile.emails.first
+        %tr
+          %td
+            Subject:
+          %td
+            = @campaign.subject
+        %tr
+          %td{colspan: 2}
+            =profile.apply_template(@campaign.email_template_id).gsub("\n",'<br/>').html_safe
 
-    -@campaign.profiles.each do |profile|
-      %tr
-        %td
-          =profile.name
-        %td
-          =profile.position
+.row
+  .col-md-8
+    - unless @campaign.sent?
+      =link_to "Send out #{@campaign.profiles.size} emails now", send_campaign_path(@campaign), method: :post, class: 'btn btn-info send-out'
+      =link_to 'Edit template', email_templates_path(email_template_id: @campaign.email_template_id), class: 'btn btn-default'

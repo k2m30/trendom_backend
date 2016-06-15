@@ -27,13 +27,18 @@
             = f.text_field :name, value: campaign_name, label: 'Campaign name'
         .row
           .col-md-6
-            =f.select :email_template_id, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id),{label: 'Choose template'}, {'data-url': new_campaign_path(fi: fi, email_template_id: params[:email_template_id], name: campaign_name, subject: subject)}
+            =f.select :email_template_id, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id), {label: 'Choose template'}, {'data-url': new_campaign_path(fi: fi, email_template_id: params[:email_template_id], name: campaign_name, subject: subject)}
+          .col-md-6.col-xs-12
+            %p{style: 'color: white;'} _
+            =link_to 'Edit', email_templates_path(email_template_id: email_template_id)
         .row
           .col-md-6
             = f.text_field :subject, value: subject
         .row
           .col-md-12#template-text
-            = profile.apply_template(email_template_id).gsub("\n",'<br/>').html_safe
+            = label_tag 'Body'
+            %p
+              = profile.apply_template(email_template_id).gsub("\n",'<br/>').html_safe
         .row
           %hr
           .col-md-6

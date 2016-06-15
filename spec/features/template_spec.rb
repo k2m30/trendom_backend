@@ -27,7 +27,7 @@ describe 'Email template page', type: :feature do
     expect(templates_before - templates_after).to be 1
   end
 
-  it 'can delete all templates and create new one' do
+  it 'can delete all templates' do
     while all('.template').size > 0 do
       find('#delete-template').click
     end
