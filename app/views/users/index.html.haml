@@ -17,107 +17,136 @@
       .col-md-8
         %p
           = @user.calls_left
-    .row
-      .col-md-4
-        Current plan:
-      .col-md-8
-        %p
-          = @user.plan
+    - if @user.plan.present?
+      .row
+        .col-md-4
+          Current plan:
+        .col-md-8
+          %p
+            = @user.plan
     .row
       .col-md-4
         Subscription is valid till:
       .col-md-8
         %p
           = @user.subscription_expires.nil? ? Time.now.to_formatted_s(:short) : @user.subscription_expires.to_formatted_s(:short)
-.row
-  .col-md-12
-    %h4 Profiles
-    %table.table
-      %thead
-        %th
-        %th
-          Name
-        %th
-          Emails available
-        %th
-          Position
-        %th
-          Location
-        %th
-          Emails
-        %th
-          Profile
-      %tbody
-        - (@user.profiles_not_in_campaigns - @user.profiles_with_hidden_emails).each do |p|
-          %tr.visible-emails
-            %td
-            %td
-              =p.name
-            %td
-              =p.emails_available
-            %td
-              =p.position
-            %td
-              =p.location
-            %td
-              -p.emails.each do |email|
-                %p
-                  =email
-            -#%td
-            -#  =p.notes unless p.notes.empty?
-            %td
-              = link_to 'Linkedin profile', p.linkedin_url, target: :_blank
-            %td
-              =p.twitter_url
-            %td
-              =p.facebook_url
-        - @user.profiles_with_hidden_emails.each do |p|
-          %tr.hidden-emails
-            %td
-              =link_to remove_profile_users_path(id: p.id), method: :post, class: 'remove-profile' do
-                = fa_icon 'remove'
-            %td
-              =p.name
-            %td
-              =p.emails_available
-            %td
-              =p.position
-            %td
-              =p.location
-            %td
-              -p.emails_available.times do
-                %p
-                  *********@*****
-            -#%td
-            -#  =p.notes unless p.notes.empty?
-            %td
-              = link_to 'Linkedin profile', p.linkedin_url, target: :_blank
-            %td
-              =p.twitter_url
-            %td
-              =p.facebook_url
+-if @user.profiles.size > 0
+  .row
+    .col-md-12
+      %hr
+  -if @user.campaigns.size > 0
+    .row
+      .col-md-12
+        %h4 Campaigns
+        %table.table
+          %thead
+            %th Name
+            %th Status
+          %tbody
+            - @user.campaigns.each do |campaign|
+              %tr
+                %td
+                  = link_to campaign.name, campaign_path(campaign)
+                %td
+                  = campaign.status
 
-.row#buttons
-  .col-md-7
-  .col-md-5(data-no-turbolink)
-    -if @user.active?
-      -if @user.profiles_with_revealed_emails.size > 0
-        = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
-          Download
-          = fa_icon 'download'
-        = link_to new_campaign_path, class: 'btn btn-default', id: 'new_campaign' do
-          Create new campaign
-          = fa_icon 'download'
+  .row
+    .col-md-12
+
+      %h4 Profiles
+      %table.table
+        %thead
+          %th
+          %th
+            Name
+          %th
+            Emails available
+          %th
+            Position
+          %th
+            Location
+          %th
+            Emails
+          %th
+            Profile
+        %tbody
+          - (@user.profiles_not_in_campaigns - @user.profiles_with_hidden_emails).each do |p|
+            %tr.visible-emails
+              %td
+              %td
+                =p.name
+              %td
+                =p.emails_available
+              %td
+                =p.position
+              %td
+                =p.location
+              %td
+                -p.emails.each do |email|
+                  %p
+                    =email
+              -#%td
+              -#  =p.notes unless p.notes.empty?
+              %td
+                = link_to 'Linkedin profile', p.linkedin_url, target: :_blank
+              %td
+                =p.twitter_url
+              %td
+                =p.facebook_url
+          - @user.profiles_with_hidden_emails.each do |p|
+            %tr.hidden-emails
+              %td
+                =link_to remove_profile_users_path(id: p.id), method: :post, class: 'remove-profile' do
+                  = fa_icon 'remove'
+              %td
+                =p.name
+              %td
+                =p.emails_available
+              %td
+                =p.position
+              %td
+                =p.location
+              %td
+                -p.emails_available.times do
+                  %p
+                    *********@*****
+              -#%td
+              -#  =p.notes unless p.notes.empty?
+              %td
+                = link_to 'Linkedin profile', p.linkedin_url, target: :_blank
+              %td
+                =p.twitter_url
+              %td
+                =p.facebook_url
+
+  .row#buttons
+    .col-md-7
+    .col-md-5(data-no-turbolink)
+      -if @user.active?
+        -if @user.profiles_with_revealed_emails.size > 0
+          = link_to download_users_path(format: :csv), class: 'btn btn-info', id: 'download' do
+            Download
+            = fa_icon 'download'
+          = link_to new_campaign_path, class: 'btn btn-default', id: 'new_campaign' do
+            Create new campaign
+            = fa_icon 'download'
 
 
-      - if @user.profiles_with_hidden_emails.size > 0
-        = link_to '#reveal', class: 'btn btn-info', id: 'reveal', data: reveal_emails_users_path do
-          Reveal emails
+        - if @user.profiles_with_hidden_emails.size > 0
+          = link_to '#reveal', class: 'btn btn-info', id: 'reveal', data: reveal_emails_users_path do
+            Reveal emails
+            = fa_icon 'download'
+      -else
+        = link_to edit_user_path(@user), class: 'btn btn-info' do
+          Choose subscription plan to download prospects
           = fa_icon 'download'
-    -else
-      = link_to edit_user_path(@user), class: 'btn btn-info' do
-        Choose subscription plan to download prospects
-        = fa_icon 'download'
+- else
+  .row
+    .col-md-8
+      %h3
+        You have no profiles yet, but you can
+        =link_to 'find some', 'http://linkedin.com', id: 'linkedin', target: '_blank'
+
 .row
   %hr
 .progress-window{style: 'display:none'}

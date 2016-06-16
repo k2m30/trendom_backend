@@ -23,4 +23,10 @@ class Campaign < ActiveRecord::Base
   def profiles
     Profile.where(id: profiles_ids)
   end
+
+  def status
+    return 'Sent' if sent?
+    return 'In progress' if progress > 0
+    'Ready to start'
+  end
 end

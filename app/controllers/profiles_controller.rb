@@ -1,4 +1,5 @@
 class ProfilesController < ApplicationController
+  before_action :authenticate_user!
   skip_before_filter :verify_authenticity_token, only: [:get_emails_available]
 
   def get_emails_available
@@ -14,6 +15,12 @@ class ProfilesController < ApplicationController
     else
       render json: Profile.get_emails_available(profiles_params)
     end
+  end
+
+  def set_primary_email
+    profile = current_user.profiles.find(params[:id])
+    profile.set_primary_email(params[:main_email])
+    render nothing: true, status: :ok
   end
 
   private

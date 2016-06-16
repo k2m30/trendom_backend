@@ -3,9 +3,12 @@ require 'resque/server'
 Rails.application.routes.draw do
   root to: 'users#index'
 
-  resources :profiles, only: [] do
+  resources :profiles, only: [:update] do
     collection do
       post 'get_emails_available'
+    end
+    member do
+      patch 'set_primary_email'
     end
   end
 

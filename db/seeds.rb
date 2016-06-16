@@ -1,7 +1,9 @@
 User.first.profiles.delete_all
 5.times do
   emails = []
-  emails << %w(1m@tut.by chuprynski@magora-systems.com chuprynski@magora.co.uk).sample
+  rand(1..3).times do
+    emails << %w(1m@tut.by chuprynski@magora-systems.com chuprynski@magora.co.uk).sample
+  end
 
   User.first.profiles.create(name: Faker::Name.name, position: Faker::Name.title << ' at ' << Faker::Company.name,
                              photo: Faker::Internet.url,

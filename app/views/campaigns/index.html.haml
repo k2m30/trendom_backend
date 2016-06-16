@@ -18,12 +18,7 @@
               %td
                 = link_to campaign.name, campaign
               %td
-                - if campaign.sent?
-                  Sent
-                - elsif campaign.progress > 0
-                  In progress
-                - else
-                  Ready to start
+                =campaign.status
               %td
                 =campaign.email_template_name
               %td

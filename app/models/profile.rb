@@ -16,6 +16,14 @@ class Profile < ActiveRecord::Base
     email_template.text.gsub('{First Name}', first).gsub('{Last Name}', last).gsub('{Company}', company)
   end
 
+  def set_primary_email(main_email)
+    return unless emails.include?(main_email)
+    a = emails
+    a.delete(main_email)
+    a.insert(0, main_email)
+    self.update(emails: a)
+  end
+
   def split_name
     name.split(' ')
   end

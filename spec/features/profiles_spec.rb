@@ -12,8 +12,13 @@ describe 'Profile manipulation' do
 
   let(:user) { User.first }
 
-  it 'can reveal emails' do
+  it 'can mine some profiles in Linkedin it user has no profiles' do
+    user.profiles.destroy_all
+    visit user_root_path
+    expect(all('#linkedin').size).to be 1
+  end
 
+  it 'can reveal emails' do
     visit reveal_emails_users_path
     visit user_root_path
     expect(user.profiles_with_hidden_emails.size).to be 0

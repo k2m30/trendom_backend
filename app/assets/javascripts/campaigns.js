@@ -15,6 +15,21 @@ $(document).on('ready page:load', function () {
         Turbolinks.visit(new_url);
     });
 
+    $('.select-email').change(function () {
+        var email = $(this).find('option:selected').val();
+        var id = $(this).attr('id');
+        console.log(email, id);
+        $.ajax({
+            method: 'PATCH',
+            url: "/profiles/" + id + '/set_primary_email',
+            data: {main_email: email}
+        }).done(function() {
+            //Turbolinks.reload();
+        });
+
+
+    });
+
     $("#_send_later").click(function () {
         console.log($(this).val());
 
