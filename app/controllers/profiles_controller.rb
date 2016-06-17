@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
+  before_filter :set_profile, only: [:edit, :update]
   skip_before_filter :verify_authenticity_token, only: [:get_emails_available]
 
   def get_emails_available
@@ -23,6 +24,17 @@ class ProfilesController < ApplicationController
     render nothing: true, status: :ok
   end
 
+  def edit
+  end
+
+  def update
+    name = params[:first_name] << ' ' << params[:last_name]
+    position = params[:position] << ' at ' << params[:company]
+    @profile.update(name: name, position: position)
+    @profile.set_primary_email(params[:primary_email])
+    redirect_to :back, notice: 'Profile successfully updated.'
+  end
+
   private
   def profiles_params
     params.permit! #(:name, :linkedin_id, :position, :location, :industry, :email)
@@ -35,4 +47,9 @@ class ProfilesController < ApplicationController
       nil
     end
   end
+
+  def set_profile
+    @profile = current_user.profiles.find(params[:id])
+  end
+
 end

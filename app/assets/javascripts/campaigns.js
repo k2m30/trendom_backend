@@ -30,6 +30,10 @@ $(document).on('ready page:load', function () {
 
     });
 
+    $(".profile").hover(function () {
+       console.log('hover');
+    });
+
     $("#_send_later").click(function () {
         console.log($(this).val());
 

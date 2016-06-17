@@ -3,7 +3,7 @@ require 'resque/server'
 Rails.application.routes.draw do
   root to: 'users#index'
 
-  resources :profiles, only: [:update] do
+  resources :profiles, only: [:edit, :update] do
     collection do
       post 'get_emails_available'
     end

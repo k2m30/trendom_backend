@@ -52,8 +52,7 @@
 
   .row
     .col-md-12
-
-      %h4 Profiles
+      %h4 Profiles for new campaign
       %table.table
         %thead
           %th
@@ -69,6 +68,7 @@
             Emails
           %th
             Profile
+          %th
         %tbody
           - (@user.profiles_not_in_campaigns - @user.profiles_with_hidden_emails).each do |p|
             %tr.visible-emails
@@ -93,6 +93,10 @@
                 =p.twitter_url
               %td
                 =p.facebook_url
+              %td
+                =link_to edit_profile_path(p) do
+                  = fa_icon 'edit'
+
           - @user.profiles_with_hidden_emails.each do |p|
             %tr.hidden-emails
               %td

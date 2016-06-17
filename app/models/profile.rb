@@ -29,7 +29,11 @@ class Profile < ActiveRecord::Base
   end
 
   def extract_company
-    position.split(' at ').first
+    position.split(' at ').last || ''
+  end
+
+  def extract_position
+    position.split(' at ').first || ''
   end
 
   def get_emails_and_notes

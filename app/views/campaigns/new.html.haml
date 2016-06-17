@@ -3,8 +3,8 @@
 - email_template_id = params[:email_template_id] || @email_templates.first.id
 - subject = params[:subject] || 'Advice needed'
 .row
-  .col-md-6
-    %table.table
+  .col-md-7
+    %table.table.table-hover
       %tbody
         -@profiles.each do |profile|
           %tr.profile
@@ -20,27 +20,30 @@
                 =select_tag :email, options_for_select(profile.emails, profile.emails.first), class: 'form-control select-email', id: profile.id
               -else
                 = profile.emails.first
+            %td
+              =link_to edit_profile_path(profile) do
+                = fa_icon 'edit'
 
-  .col-md-6
+  .col-md-5
     = bootstrap_form_tag url: campaigns_path do |f|
       - profile = params[:profile_id].nil? ? @profiles.first : @profiles.find(params[:profile_id])
       - if profile.present?
         .row
-          .col-md-6
+          .col-md-7
             = f.text_field :name, value: campaign_name, label: 'Campaign name'
         .row
-          .col-md-6
+          .col-md-7
             =f.select :email_template_id, options_from_collection_for_select(@email_templates, 'id', 'name', email_template_id), {label: 'Choose template'}, {'data-url': new_campaign_path(fi: fi, email_template_id: params[:email_template_id], name: campaign_name, subject: subject)}
-          .col-md-6.col-xs-12
+          .col-md-5.col-xs-12
             %p{style: 'color: white;'} _
             =link_to 'Edit', email_templates_path(email_template_id: email_template_id)
         .row
-          .col-md-6
+          .col-md-7
             = f.text_field :subject, value: subject
         .row
           .col-md-12#template-text
             = label_tag 'Body'
-            %p
+            %p#body
               = profile.apply_template(email_template_id).gsub("\n",'<br/>').html_safe
         .row
           %hr

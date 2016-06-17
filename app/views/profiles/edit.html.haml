@@ -1,0 +1,41 @@
+-first_name, last_name = @profile.split_name
+-company = @profile.extract_company
+-position = @profile.extract_position
+
+.row
+  .col-md-8
+    %p
+      %strong
+        Current data
+    %table.table.table-bordered
+      %thead
+      %tbody
+        %tr
+          %td
+            Full Name
+          %td
+            =@profile.name
+        %tr
+          %td
+            Full Position
+          %td
+            =@profile.position
+        %tr
+          %td
+            Emails
+          %td
+            -@profile.emails.each_with_index do |email, i|
+              %p
+                =email
+                -if i.zero?
+                  %strong
+                    (primary)
+
+
+    =bootstrap_form_tag url: profile_path(@profile), method: :patch do |f|
+      =f.text_field :first_name, value: first_name
+      =f.text_field :last_name, value: last_name
+      =f.text_field :position, value: position
+      =f.text_field :company, value: company
+      =f.select :primary_email, options_for_select(@profile.emails, @profile.emails.first)
+      =f.submit

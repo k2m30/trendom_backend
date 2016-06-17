@@ -50,6 +50,6 @@
 
 .row
   .col-md-8
-    - unless @campaign.sent?
-      =link_to "Send out #{@campaign.profiles.size} emails now", send_campaign_path(@campaign), method: :post, class: 'btn btn-info send-out'
+    - if @campaign.progress.zero?
       =link_to 'Edit template', email_templates_path(email_template_id: @campaign.email_template_id), class: 'btn btn-default'
+      =link_to "Send out #{@campaign.profiles.size} emails now", send_campaign_path(@campaign), method: :post, class: 'btn btn-info send-out'
