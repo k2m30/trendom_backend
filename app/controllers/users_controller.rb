@@ -46,23 +46,19 @@ class UsersController < ApplicationController
   end
 
   def reveal_emails
-    @user.reveal_emails
+    current_user.reveal_emails
     render nothing: true, status: :ok
   end
 
   def progress
-    sleep 1
-    render text: @user.progress.round(2)
+    # sleep 1
+    render text: current_user.progress.round(2)
   end
 
   def download
     respond_to do |format|
       format.csv do
-        if @user.enough_calls?
-          send_data @user.export_profiles
-        else
-          redirect_to root_path, alert: 'Reduce number of prospects to download according to calls left in your subscription'
-        end
+        send_data current_user.export_profiles
       end
     end
   end

@@ -3,7 +3,7 @@ require 'capybara/rails'
 
 require_relative 'features_common'
 
-describe 'Profile manipulation' do
+describe 'Profile' do
   before :each do
     login
     seed
@@ -19,14 +19,19 @@ describe 'Profile manipulation' do
   end
 
   it 'can reveal emails' do
-    visit reveal_emails_users_path
+    expect(user.calls_left).to be 300
+    expect(user.profiles_with_hidden_emails.size).to be 5
+
+    user.reveal_emails
     visit user_root_path
-    expect(user.profiles_with_hidden_emails.size).to be 0
+
     expect(all('.hidden-emails').size).to be 0
     expect(all('.visible-emails').size).to be 20
-    expect(user.calls_left).to be 295
     expect(all('#reveal').size).to be 0
     expect(all('#download').size).to be 1
+    sleep 5
+    expect(user.calls_left).to be 295
+    expect(user.profiles_with_hidden_emails.size).to be 0
   end
 
   it 'can delete hidden profiles' do

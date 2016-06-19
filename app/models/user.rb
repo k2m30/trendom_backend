@@ -18,9 +18,9 @@ class User < ActiveRecord::Base
     active
   end
 
-  def enough_calls?
-    calls_left >= profiles_with_hidden_emails.size
-  end
+  # def enough_calls?
+  #   calls_left >= profiles_with_hidden_emails.size
+  # end
 
   def profiles_with_revealed_emails
     profiles.where(id: revealed_ids)
@@ -40,9 +40,9 @@ class User < ActiveRecord::Base
     profiles.where.not(id: ids.flatten)
   end
 
-  def download
-    self.profiles
-  end
+  # def download
+  #   self.profiles
+  # end
 
   def purchase(params)
     return false unless check_md5_hash
@@ -112,10 +112,11 @@ class User < ActiveRecord::Base
 
   def reveal_emails
     new_revealed = revealed_ids
-    hidden_emails_size = profiles_with_hidden_emails.size
+    hidden_emails_size = [profiles_with_hidden_emails.size, calls_left].min
     self.update(progress: 0.0) #if hidden_emails_size > 0
-    profiles_with_hidden_emails.each_with_index do |profile, i|
-      profile.get_emails_and_notes
+    # SendEmailJob.set(queue: user.name.to_sym).perform_later(profile.id, id, user.email, user.tkn, user.name)
+    profiles_with_hidden_emails[0..calls_left-1].each_with_index do |profile, i|
+      profile.get_emails
       self.update(progress: ((i+1)/hidden_emails_size.to_f).round(4)*100)
       new_revealed << profile.id
     end
@@ -126,7 +127,7 @@ class User < ActiveRecord::Base
     columns = %w(name position photo location emails notes linkedin_url twitter_url facebook_url)
     CSV.generate(options) do |csv|
       csv << columns.map(&:capitalize)
-      profiles.each do |profile|
+      profiles_with_revealed_emails.each do |profile|
         csv << profile.attributes.values_at(*columns)
       end
     end

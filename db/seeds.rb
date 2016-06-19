@@ -1,5 +1,5 @@
 User.first.profiles.delete_all
-5.times do
+20.times do
   emails = []
   rand(1..3).times do
     emails << %w(1m@tut.by chuprynski@magora-systems.com chuprynski@magora.co.uk).sample

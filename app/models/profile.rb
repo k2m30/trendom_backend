@@ -11,9 +11,8 @@ class Profile < ActiveRecord::Base
 
   def apply_template(email_template_id)
     first, last = split_name
-    company = extract_company
     email_template = EmailTemplate.find(email_template_id)
-    email_template.text.gsub('{First Name}', first).gsub('{Last Name}', last).gsub('{Company}', company)
+    email_template.text.gsub('{First Name}', first).gsub('{Last Name}', last).gsub('{Company}', extract_company).gsub('{Position}', extract_position)
   end
 
   def set_primary_email(main_email)
@@ -36,15 +35,24 @@ class Profile < ActiveRecord::Base
     position.split(' at ').first || ''
   end
 
-  def get_emails_and_notes
+  def get_emails
+    return emails unless emails.empty?
+
+    get_emails_from_google
+    return emails unless emails.empty?
+
+    get_emails_from_pipl
+    return emails
+  end
+
+  def get_emails_from_pipl(update = true)
     if Rails.env.development? or Rails.env.test?
-      sleep 2 if Rails.env.development?
-      update(notes: {}, emails: [Faker::Internet.email]) if self.emails.empty?
+      sleep rand(1..2) if Rails.env.development?
+      update(notes: {}, emails: [Faker::Internet.email]) if emails.empty?
       return
     end
 
-    return unless emails.empty?
-    return if emails_available.zero?
+    return [] if emails_available.zero?
 
     account_id = nil
     account_id = "#{linkedin_id}@linkedin" unless linkedin_id.nil?
@@ -52,28 +60,27 @@ class Profile < ActiveRecord::Base
     account_id = "#{twitter_id}@twitter" unless twitter_id.nil?
     return [] if account_id.nil?
 
-    person = PiplDb.find(name: name, account_id: account_id) #|| FullContactDb.find(params)
+    person = PiplDb.find(name: name, account_id: account_id)
     notes = person.to_hash
     notes.delete(:search_pointer)
     notes.delete(:emails)
-    update(notes: notes, emails: person.emails.map(&:address))
-    person
+    update(notes: notes, emails: person.emails.map(&:address)) if update
+    emails
   end
 
-  def get_emails_from_google
-
+  def get_emails_from_google(update = true)
     EmailVerifier.config do |config|
       config.verifier_email ||= 'team@trendom.io'
     end
 
-    company = position.split(' at ')[1][/.[a-z\.\- &]+/]
-    return nil if company.nil?
+    company = extract_company[/.[a-z\.\- &]+/]
+    return [] if company.nil?
     company = company[/.[a-zA-Z\.\- &]+/]
 
     rejected_list = %w(linkedin twitter wikipedia apple facebook)
     query = "#{company} contacts"
-    serp = GoogleCustomSearchApi.search(query, page: 1, googlehost: 'google.co.uk')
-    domain_options = serp['items'].map { |i| i['displayLink']}.reject{|i| rejected_list.any? {|a| i.include? a}}
+    serp = GoogleCustomSearchApi.search(query, page: 1, googlehost: get_googlehost)
+    domain_options = serp['items'].map { |i| i['displayLink'] }.reject { |i| rejected_list.any? { |a| i.include? a } }
     domain = domain_options.first[/[^\.]+\.[a-z]+$/]
 
     p [query, company, position]
@@ -87,9 +94,18 @@ class Profile < ActiveRecord::Base
     options.each do |option|
       email = "#{option}@#{domain}"
       p email
-      return email if EmailVerifier.check(email)
+      if EmailVerifier.check(email)
+        e = emails || []
+        e << email
+        update(emails: e) if update
+        return [email]
+      end
     end
-    return nil
+    return []
+  end
+
+  def get_googlehost
+    'google.com'
   end
 
   def self.get_emails_available(params)
@@ -111,7 +127,7 @@ class Profile < ActiveRecord::Base
             hash[p.id] = emails_available
 
             new_profiles << {linkedin_id: p.id, linkedin_url: "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze,
-                           name: p.name, position: p.position, location: p.location, photo: p.photo, emails_available: emails_available}
+                             name: p.name, position: p.position, location: p.location, photo: p.photo, emails_available: emails_available}
           end
           threads << thread
         end
