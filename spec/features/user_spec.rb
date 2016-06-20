@@ -3,7 +3,7 @@ require 'capybara/rails'
 
 require_relative 'features_common'
 
-describe 'User' do
+describe 'User', type: :feature do
   before :each do
     login
     seed
@@ -17,6 +17,7 @@ describe 'User' do
     hidden = user.profiles_with_hidden_emails.size
     expect(hidden).not_to be 0
     user.reveal_emails
+    user.reload
     expect(user.progress).to be 100.0
     expect(user.profiles_with_hidden_emails.size).to be 0
     expect(user.calls_left).to be (calls - hidden)
@@ -28,6 +29,7 @@ describe 'User' do
     expect(hidden).not_to be 0
     user.update(calls_left: hidden - 1)
     user.reveal_emails
+    user.reload
     expect(user.progress).to be 100.0
     expect(user.calls_left).to be 0
     expect(user.profiles_with_hidden_emails.size).to be 1

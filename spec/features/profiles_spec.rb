@@ -23,13 +23,13 @@ describe 'Profile' do
     expect(user.profiles_with_hidden_emails.size).to be 5
 
     user.reveal_emails
+    user.reload
     visit user_root_path
 
     expect(all('.hidden-emails').size).to be 0
     expect(all('.visible-emails').size).to be 20
     expect(all('#reveal').size).to be 0
     expect(all('#download').size).to be 1
-    sleep 5
     expect(user.calls_left).to be 295
     expect(user.profiles_with_hidden_emails.size).to be 0
   end

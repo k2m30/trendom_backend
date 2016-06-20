@@ -111,16 +111,15 @@ class User < ActiveRecord::Base
   end
 
   def reveal_emails
-    new_revealed = revealed_ids
-    hidden_emails_size = [profiles_with_hidden_emails.size, calls_left].min
+    work_size = [profiles_with_hidden_emails.size, calls_left].min
     self.update(progress: 0.0) #if hidden_emails_size > 0
-    # SendEmailJob.set(queue: user.name.to_sym).perform_later(profile.id, id, user.email, user.tkn, user.name)
-    profiles_with_hidden_emails[0..calls_left-1].each_with_index do |profile, i|
-      profile.get_emails
-      self.update(progress: ((i+1)/hidden_emails_size.to_f).round(4)*100)
-      new_revealed << profile.id
+    profiles_with_hidden_emails[0..work_size-1].each do |profile|
+      if Rails.env.test?
+        RevealEmailJob.set(queue: :test).perform_now(id, profile.id, 1/work_size.to_f*100.0)
+      else
+        RevealEmailJob.set(queue: name.to_sym).perform_later(id, profile.id, 1/work_size.to_f*100.0)
+      end
     end
-    self.update(revealed_ids: new_revealed, calls_left: calls_left - hidden_emails_size) if hidden_emails_size > 0
   end
 
   def export_profiles(options = {})
