@@ -1,9 +1,11 @@
+require 'rails_helper'
+
 require 'capybara/rspec'
 require 'capybara/rails'
 
 require_relative 'features_common'
 
-describe 'User', type: :feature do
+RSpec.feature User, type: :feature do
   before :each do
     login
     seed

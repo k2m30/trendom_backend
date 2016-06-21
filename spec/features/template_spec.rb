@@ -1,12 +1,11 @@
-require_relative '../rails_helper'
-require_relative '../spec_helper'
+require 'rails_helper'
 
 require 'capybara/rspec'
 require 'capybara/rails'
 
 require_relative 'features_common'
 
-describe 'Email template page', type: :feature do
+RSpec.feature EmailTemplate, type: :feature do
   before :each do
     login
     seed

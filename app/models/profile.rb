@@ -4,6 +4,9 @@ require_relative 'user_request'
 require 'email_verifier'
 require 'google_custom_search_api'
 
+TWO_PART_DOMAINS = %w(ac.at ac.il ac.uk aol.com apc.org asn.au att.com att.net boi.ie bp.com cmu.edu co.com co.gg co.il co.im co.in co.je co.jp co.nz co.th co.uk co.ukc co.za co.zw com.ar com.au com.bh com.br com.cn com.cy com.gt com.hk com.mk com.mt com.mx com.ng com.pk com.pt com.qa com.sg com.tr com.ua dcu.ie dsv.com edu.ge edu.in edu.tr eu.com ey.com gb.com ge.com gm.com gov.au gov.im gov.uk gt.com gwu.edu hhs.se hse.fi ibm.com ie.edu in.gov in.ua ing.com jnj.com ko.com kth.se kwe.com lls.com ltd.uk me.uk mit.edu mod.uk mps.it msn.com net.au net.il net.lb net.nz net.tr net.uk nhs.uk nyc.gov org.pl org.qa org.uk pkf.com plc.uk pwc.com rlb.com rr.com sas.com tac.com tcd.ie to.it uk.com uk.net unc.edu ups.com us.com utc.com yr.com)
+
+
 class Profile < ActiveRecord::Base
   has_and_belongs_to_many :users
   serialize :notes, Hash
@@ -46,21 +49,14 @@ class Profile < ActiveRecord::Base
   end
 
   def get_emails_from_pipl(update = true)
-    if Rails.env.development? or Rails.env.test?
-      sleep rand(1..2) if Rails.env.development?
-      update(notes: {}, emails: [Faker::Internet.email]) if emails.empty?
-      return
-    end
-
-    return [] if emails_available.zero?
-
     account_id = nil
     account_id = "#{linkedin_id}@linkedin" unless linkedin_id.nil?
     account_id = "#{facebook_id}@facebook" unless facebook_id.nil?
     account_id = "#{twitter_id}@twitter" unless twitter_id.nil?
     return [] if account_id.nil?
 
-    person = PiplDb.find(name: name, account_id: account_id)
+    first, last = split_name
+    person = PiplDb.find(first: first, last: last, account_id: account_id)
     notes = person.to_hash
     notes.delete(:search_pointer)
     notes.delete(:emails)
@@ -69,43 +65,49 @@ class Profile < ActiveRecord::Base
   end
 
   def get_emails_from_google(update = true)
-    EmailVerifier.config do |config|
-      config.verifier_email ||= 'team@trendom.io'
-    end
+    domain_options = []
+    email_options = []
 
-    company = extract_company[/.[a-z\.\- &]+/]
-    return [] if company.nil?
-    company = company[/.[a-zA-Z\.\- &]+/]
+    begin
+      company = extract_company[/.[a-zA-Z\.\- &]+/]
+      return [] if company.nil?
 
-    rejected_list = %w(linkedin twitter wikipedia apple facebook)
-    query = "#{company} contacts"
-    serp = GoogleCustomSearchApi.search(query, page: 1, googlehost: get_googlehost)
-    domain_options = serp['items'].map { |i| i['displayLink'] }.reject { |i| rejected_list.any? { |a| i.include? a } }
-    domain = domain_options.first[/[^\.]+\.[a-z]+$/]
+      rejected_list = %w(linkedin twitter wikipedia apple facebook)
+      query = "#{company} contacts"
+      serp = GoogleCustomSearchApi.search(query, page: 1, googlehost: get_googlehost)
+      raw_domain_options = serp['items'].map { |i| i['displayLink'] }.reject { |i| rejected_list.any? { |a| i.include? a } }
 
-    p [query, company, position]
-    p domain_options
-
-    first, last = name.split(' ')
-    options = %W(#{first} #{first}.#{last} #{first[0]}#{last} #{last}).map(&:downcase)
-
-    p options
-
-    options.each do |option|
-      email = "#{option}@#{domain}"
-      p email
-      if EmailVerifier.check(email)
-        e = emails || []
-        e << email
-        update(emails: e) if update
-        return [email]
+      raw_domain_options.each do |domain|
+        if two_part_domain? domain
+          domain_options << domain[/[^\.]+\.[^\.]+\.[a-z]+$/]
+        else
+          domain_options << domain[/[^\.]+\.[a-z]+$/]
+        end
       end
+
+      domain_options.uniq!
+
+      first, last = split_name
+      email_options = %W(#{first}.#{last} #{first[0]}#{last} #{first} #{last}).map(&:downcase)
+
+
+      email = EmailChecker.new(domain_options, email_options).find_right_email
+
+      if email
+        update(emails: [email]) if update
+        [email]
+      else
+        []
+      end
+    rescue => e
+      logger.error "#{name}, #{position}, #{domain_options}, #{email_options}, #{e.message}"
+      return []
     end
-    return []
+
   end
 
   def get_googlehost
-    'google.com'
+    location.include?('United Kingdom') ? 'google.co.uk' : 'google.com'
   end
 
   def self.get_emails_available(params)
@@ -149,6 +151,11 @@ class Profile < ActiveRecord::Base
     logger.warn hash.to_json
     hash.to_json
   end
+
+  def two_part_domain?(domain)
+    !TWO_PART_DOMAINS.all? { |tp| domain[/#{tp}$/].nil? }
+  end
+
 end
 
 # {"name" => "Greg Barnett",

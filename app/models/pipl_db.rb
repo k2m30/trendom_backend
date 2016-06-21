@@ -1,6 +1,8 @@
 require 'pipl'
 
 class PiplDb
+  KEYS = %w(BUSINESS-PREMIUM-DEMO-uw9fxpygvzs7mrucz7vp1gub BUSINESS-DEMO-qc9f5f4wvdwbu46qt43sr5nw BUSINESS-DEMO-o8u26xca0288p17opt7vi5e5 BUSINESS-PREMIUM-DEMO-66spkvy0o4ynmjnyxmcdxqt2)
+
   def self.find(person_hash)
     response = get_response(person_hash, 'email'.freeze)
     return response.person
@@ -19,17 +21,10 @@ class PiplDb
   private
 
   def self.get_response(person_hash, match_requirements)
-    first, last = extract person_hash[:name]
     person = Pipl::Person.new
-    person.add_field Pipl::Name.new(first: first, last: last)
+    person.add_field Pipl::Name.new(first: person_hash[:first], last: person_hash[:last])
     person.add_field Pipl::UserID.new content: person_hash[:account_id]
-    Pipl::client.search person: person, match_requirements: match_requirements, api_key: ENV['PIPL'].freeze
-  end
-
-  def self.extract(full_name)
-    name = full_name.split(' ')
-    first = name[0]
-    last = name[1]
-    return first, last
+    api_key = Rails.env.producttion? ? ENV['PIPL'].freeze : KEYS.sample
+    Pipl::client.search person: person, match_requirements: match_requirements, api_key: api_key
   end
 end

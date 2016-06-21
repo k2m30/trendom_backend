@@ -1,5 +1,4 @@
-require_relative '../rails_helper'
-require_relative '../spec_helper'
+require 'rails_helper'
 
 require 'capybara/rspec'
 require 'capybara/rails'
@@ -23,7 +22,7 @@ def create_campaign(now = false, delete_profiles = 0)
 
 end
 
-describe 'Campaign', type: :feature do
+RSpec.feature Campaign, type: :feature do
 
   before :each do
     login
