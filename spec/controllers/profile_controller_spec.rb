@@ -8,5 +8,6 @@ RSpec.describe 'Profile' do
     page.driver.post '/people/find', hash
     expect(response.status).to eq(200)
     expect(User.count).to eq(1)
+    expect(Profile.count).to eq(10)
   end
 end
