@@ -118,7 +118,7 @@ class Profile < ActiveRecord::Base
     ids = request.ids
     case request.source
       when :linkedin
-        profiles = Profile.where(linkedin_id: [ids])
+        profiles = Profile.where(linkedin_id: ids)
 
         # profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
         hash = profiles.pluck(:linkedin_id, :emails_available).to_h
