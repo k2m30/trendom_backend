@@ -27,13 +27,25 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'spring'
 
 gem 'puma'
-gem 'piplapis-ruby'
-gem 'fullcontact'
+
 gem 'tail'
+gem 'sanitize'
+
 gem 'gmail'
-gem 'email_verifier', require: false
+gem 'piplapis-ruby'
+gem 'dnsruby'
 gem 'google_custom_search_api'
-# gem 'doorkeeper'
+
+gem 'omniauth-google-oauth2'
+gem 'devise'
+
+gem 'bootstrap-sass', '~> 3.3.6'
+gem 'font-awesome-rails'
+gem 'bootstrap_form'
+
+gem 'resque'
+
+gem 'haml-rails', '~> 0.9'
 
 group :development do
   gem 'better_errors'
@@ -48,16 +60,3 @@ group :development, :test do
   gem 'faker'
   gem 'spring-commands-rspec', git: 'https://github.com/thewoolleyman/spring-commands-rspec.git'
 end
-
-#authentication
-gem 'omniauth-google-oauth2'
-gem 'devise'
-
-gem 'bootstrap-sass', '~> 3.3.6'
-gem 'font-awesome-rails'
-gem 'bootstrap_form'
-gem 'curb'
-gem 'sanitize'
-gem 'resque'
-
-gem 'haml-rails', '~> 0.9'
