@@ -1,4 +1,11 @@
+require_relative 'full_contact_db'
+require_relative 'pipl_db'
+require_relative 'user_request'
+require 'email_verifier'
+require 'google_custom_search_api'
+
 TWO_PART_DOMAINS = %w(ac.at ac.il ac.uk aol.com apc.org asn.au att.com att.net boi.ie bp.com cmu.edu co.com co.gg co.il co.im co.in co.je co.jp co.nz co.th co.uk co.ukc co.za co.zw com.ar com.au com.bh com.br com.cn com.cy com.gt com.hk com.mk com.mt com.mx com.ng com.pk com.pt com.qa com.sg com.tr com.ua dcu.ie dsv.com edu.ge edu.in edu.tr eu.com ey.com gb.com ge.com gm.com gov.au gov.im gov.uk gt.com gwu.edu hhs.se hse.fi ibm.com ie.edu in.gov in.ua ing.com jnj.com ko.com kth.se kwe.com lls.com ltd.uk me.uk mit.edu mod.uk mps.it msn.com net.au net.il net.lb net.nz net.tr net.uk nhs.uk nyc.gov org.pl org.qa org.uk pkf.com plc.uk pwc.com rlb.com rr.com sas.com tac.com tcd.ie to.it uk.com uk.net unc.edu ups.com us.com utc.com yr.com)
+
 
 class Profile < ActiveRecord::Base
   has_and_belongs_to_many :users
@@ -146,7 +153,7 @@ class Profile < ActiveRecord::Base
   end
 
   def two_part_domain?(domain)
-    TWO_PART_DOMAINS.any? { |tp| domain[/#{tp}$/] }
+    !TWO_PART_DOMAINS.all? { |tp| domain[/#{tp}$/].nil? }
   end
 
 end

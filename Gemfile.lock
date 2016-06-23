@@ -76,6 +76,7 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.2)
     crass (1.0.2)
+    curb (0.9.3)
     debug_inspector (0.0.2)
     devise (4.1.1)
       bcrypt (~> 3.0)
@@ -85,16 +86,25 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
     dnsruby (1.59.3)
+    email_verifier (0.1.0)
+      dnsruby (>= 1.5)
     erubis (2.7.0)
     execjs (2.7.0)
     faker (1.6.3)
       i18n (~> 0.5)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.10.0)
+      faraday (>= 0.7.4, < 0.10)
     ffi (1.9.10)
     font-awesome-rails (4.6.3.0)
       railties (>= 3.2, < 5.1)
     formatador (0.2.5)
+    fullcontact (0.13.0)
+      faraday (~> 0.9.0)
+      faraday_middleware (>= 0.9)
+      hashie (>= 2.0, < 4.0)
+      plissken
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     gmail (0.6.0)
@@ -194,6 +204,8 @@ GEM
     pg (0.18.4)
     piplapis-ruby (5.0.2)
     pkg-config (1.1.7)
+    plissken (0.2.0)
+      symbolize (~> 4.2)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -294,6 +306,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    symbolize (4.5.2)
+      activemodel (>= 3.2, < 5)
+      activesupport (>= 3.2, < 5)
+      i18n
     tail (0.1.5)
       rails (>= 4.0)
     thor (0.19.1)
@@ -322,10 +338,12 @@ DEPENDENCIES
   bootstrap_form
   capybara
   coffee-rails (~> 4.1.0)
+  curb
   devise
-  dnsruby
+  email_verifier
   faker
   font-awesome-rails
+  fullcontact
   gmail
   google_custom_search_api
   guard-haml
