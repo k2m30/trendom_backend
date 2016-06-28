@@ -153,7 +153,7 @@ class Profile < ActiveRecord::Base
   end
 
   def two_part_domain?(domain)
-    !TWO_PART_DOMAINS.all? { |tp| domain[/#{tp}$/].nil? }
+    TWO_PART_DOMAINS.any? { |tp| domain[/#{tp}$/] }
   end
 
 end

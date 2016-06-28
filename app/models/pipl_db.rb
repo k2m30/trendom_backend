@@ -24,7 +24,7 @@ class PiplDb
     person = Pipl::Person.new
     person.add_field Pipl::Name.new(first: person_hash[:first], last: person_hash[:last])
     person.add_field Pipl::UserID.new content: person_hash[:account_id]
-    api_key = Rails.env.producttion? ? ENV['PIPL'].freeze : KEYS.sample
+    api_key = Rails.env.production? ? ENV['PIPL'].freeze : KEYS.sample
     Pipl::client.search person: person, match_requirements: match_requirements, api_key: api_key
   end
 end
