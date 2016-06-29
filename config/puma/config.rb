@@ -51,7 +51,7 @@ state_path '/home/deployer/puma.state'
 # "false".
 #
 # stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr'
-stdout_redirect '/home/deployer/trendom_backend/log/puma_stdout.log', '/home/deployer/trendom_backend/log/puma_sterr.log', true
+stdout_redirect '/home/deployer/trendom_backend/log/stdout.log', '/home/deployer/trendom_backend/log/error.log', true
 
 # Disable request logging.
 #
@@ -72,7 +72,7 @@ threads 8, 32
 # The default is "tcp://0.0.0.0:9292".
 #
 # bind 'tcp://0.0.0.0:9292'
-bind 'unix:///home/deployer/puma.sock'
+bind 'unix:///home/deployer/trendom.sock'
 # bind 'unix:///var/run/puma.sock?umask=0111'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
 
@@ -164,7 +164,7 @@ workers 3
 
 # Additional text to display in process listing
 #
-# tag 'app name'
+tag 'Trendom server'
 #
 # If you do not specify a tag, Puma will infer it. If you do not want Puma
 # to add a tag, use an empty string.
