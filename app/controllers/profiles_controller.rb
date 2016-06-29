@@ -4,7 +4,6 @@ class ProfilesController < ApplicationController
   skip_before_filter :verify_authenticity_token, only: [:get_emails_available]
 
   def get_emails_available
-    logger.warn params
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
     headers['Access-Control-Request-Method'] = '*'
