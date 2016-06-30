@@ -148,8 +148,8 @@ class Profile < ActiveRecord::Base
     new_profiles.each do |profile_hash|
       Profile.create profile_hash
     end
-    logger.warn hash.to_json
-    hash.to_json
+    logger.warn hash
+    hash
   end
 
   def two_part_domain?(domain)

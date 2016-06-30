@@ -13,7 +13,10 @@ class ProfilesController < ApplicationController
     if @user.nil?
       render nothing: true, status: :unauthorized
     else
-      render json: Profile.get_emails_available(profiles_params)
+      hash = Profile.get_emails_available(profiles_params)
+      hash[:status] = {}
+      hash[:status][:calls_left] = @user.calls_left
+      render json: hash.to_json
     end
   end
 
