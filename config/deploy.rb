@@ -41,6 +41,9 @@ task :setup => :environment do
   queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml' and 'secrets.yml'."]
 
+  queue! %[ln -s /var/log/nginx/error.log.1 "#{deploy_to}/#{shared_path}/log/nginx_error.log"]
+  queue! %[ln -s /var/log/nginx/access.log.1 "#{deploy_to}/#{shared_path}/log/nginx_access.log"]
+
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
     repo_port = /:([0-9]+)/.match(repository) && /:([0-9]+)/.match(repository)[1] || '22'
@@ -53,10 +56,6 @@ task :setup => :environment do
   end
 end
 
-task :enviroment do
-  invoke :'rvm:use[ruby-2.3.1@default]'
-end
-
 desc "Deploys the current version to the server."
 task :deploy => :environment do
   to :before_hook do
@@ -65,11 +64,6 @@ task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
-    queue! "echo $SHELL"
-    queue! "echo $GEM_PATH"
-    queue! "echo $GEM_HOME"
-    queue! 'echo `which rvm`'
-    queue! "echo $PATH"
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -82,6 +76,29 @@ task :deploy => :environment do
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
     end
   end
+end
+
+task :cold_start => :environment do
+  queue! "COUNT=5 QUEUE=* #{deploy_to}/#{current_path}/bin/rake resque:work"
+  queue! 'sudo service nginx restart'
+  queue! "puma -C #{deploy_to}/#{current_path}/config/puma/config.rb"
+end
+
+task :restart => :environment do
+  queue! 'pumactl -P puma.pid restart'
+end
+
+task :stop => :environment do
+  queue! 'pumactl -P puma.pid stop'
+end
+
+task :restart_all => :environment do
+  queue! 'sudo service nginx restart'
+  queue! 'pumactl -P puma.pid restart'
+end
+
+task :restart_nginx => :environment do
+  queue! 'sudo service nginx restart'
 end
 
 # For help in making your deploy script, see the Mina documentation:

@@ -39,20 +39,20 @@ daemonize
 
 # Store the pid of the server in the file at "path".
 #
-pidfile '/home/deployer/puma.pid'
+pidfile '/home/deploy/puma.pid'
 
 # Use "path" as the file to store the server info state. This is
 # used by "pumactl" to query and control the server.
 #
-state_path '/home/deployer/puma.state'
+state_path '/home/deploy/puma.state'
 
 # Redirect STDOUT and STDERR to files specified. The 3rd parameter
 # ("append") specifies whether the output is appended, the default is
 # "false".
 #
 # stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr'
-stdout_redirect '/home/deployer/trendom_backend/log/stdout.log', '/home/deployer/trendom_backend/log/error.log', true
-
+stdout_redirect '/home/deploy/trendom.io/shared/log/puma_access.log', '/home/deploy/trendom.io/shared/log/puma_error.log', true
+plugin 'tmp_restart'
 # Disable request logging.
 #
 # The default is "false".
@@ -72,7 +72,7 @@ threads 8, 32
 # The default is "tcp://0.0.0.0:9292".
 #
 # bind 'tcp://0.0.0.0:9292'
-bind 'unix:///home/deployer/trendom.sock'
+bind 'unix:///home/deploy/trendom.sock'
 # bind 'unix:///var/run/puma.sock?umask=0111'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
 
@@ -108,7 +108,7 @@ bind 'unix:///home/deployer/trendom.sock'
 #
 # The default is "0".
 #
-workers 3
+workers 2
 
 # Code to run immediately before the master starts workers.
 #
