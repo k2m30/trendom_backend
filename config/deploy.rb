@@ -68,12 +68,13 @@ task :deploy => :environment do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-
+    queue! "rm /etc/nginx/sites-enabled/trendom.conf"
     queue! "ln -s #{deploy_to}/#{current_path}/config/nginx/trendom.conf /etc/nginx/sites-enabled/trendom.conf"
 
     to :launch do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
+      invoke :restart_nginx
     end
   end
 end
