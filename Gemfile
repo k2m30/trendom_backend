@@ -47,6 +47,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'faker'
   gem 'spring-commands-rspec', git: 'https://github.com/thewoolleyman/spring-commands-rspec.git'
+  gem 'curb'
 end
 
 #authentication
@@ -56,7 +57,6 @@ gem 'devise'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'font-awesome-rails'
 gem 'bootstrap_form'
-gem 'curb'
 gem 'sanitize'
 gem 'resque'
 

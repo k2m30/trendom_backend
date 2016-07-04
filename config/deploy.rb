@@ -11,7 +11,7 @@ require 'mina/rvm'    # for rvm support. (http://rvm.io)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :domain, 'trendom.io'
-set :deploy_to, '/home/deployer/trendom.io'
+set :deploy_to, '/home/deploy/trendom.io'
 set :repository, 'git://github.com/k2m30/trendom_backend'
 set :branch, 'master'
 
@@ -20,9 +20,9 @@ set :branch, 'master'
 set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log']
 
 # Optional settings:
-  set :user, 'deployer'    # Username in the server to SSH to.
+  set :user, 'deploy'    # Username in the server to SSH to.
 #   set :port, '30000'     # SSH port number.
-  set :forward_agent, true     # SSH forward_agent.
+#   set :forward_agent, true     # SSH forward_agent.
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
