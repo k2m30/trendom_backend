@@ -91,11 +91,11 @@ task :start => :environment do
 end
 
 task :restart => :environment do
-  queue! 'pumactl -P puma.pid restart'
+  queue! 'pumactl -P ~/puma.pid restart'
 end
 
 task :stop => :environment do
-  queue! 'pumactl -P puma.pid stop'
+  queue! 'pumactl -P ~/puma.pid stop'
 end
 
 task :restart_all => :environment do
