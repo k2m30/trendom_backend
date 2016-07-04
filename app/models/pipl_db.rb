@@ -1,6 +1,6 @@
 require 'pipl'
 
-KEYS = %w(BUSINESS-PREMIUM-DEMO-uw9fxpygvzs7mrucz7vp1gub BUSINESS-DEMO-qc9f5f4wvdwbu46qt43sr5nw BUSINESS-DEMO-o8u26xca0288p17opt7vi5e5 BUSINESS-PREMIUM-DEMO-66spkvy0o4ynmjnyxmcdxqt2)
+KEYS ||= %w(BUSINESS-PREMIUM-DEMO-uw9fxpygvzs7mrucz7vp1gub BUSINESS-DEMO-qc9f5f4wvdwbu46qt43sr5nw BUSINESS-DEMO-o8u26xca0288p17opt7vi5e5 BUSINESS-PREMIUM-DEMO-66spkvy0o4ynmjnyxmcdxqt2)
 
 class PiplDb
   def self.find(person_hash)

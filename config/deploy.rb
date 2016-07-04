@@ -79,9 +79,9 @@ task :deploy => :environment do
 end
 
 task :cold_start => :environment do
-  queue! "COUNT=5 QUEUE=* #{deploy_to}/#{current_path}/bin/rake resque:work"
-  queue! 'sudo service nginx restart'
-  queue! "puma -C #{deploy_to}/#{current_path}/config/puma/config.rb"
+  queue! "RAILS_ENV=production COUNT=5 QUEUE=* #{deploy_to}/#{current_path}/bin/rake resque:work"
+  invoke :restart_nginx
+  queue! "puma"
 end
 
 task :restart => :environment do
@@ -93,8 +93,8 @@ task :stop => :environment do
 end
 
 task :restart_all => :environment do
-  queue! 'sudo service nginx restart'
-  queue! 'pumactl -P puma.pid restart'
+  invoke :restart_nginx
+  invoke :restart
 end
 
 task :restart_nginx => :environment do
