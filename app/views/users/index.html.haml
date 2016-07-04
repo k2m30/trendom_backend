@@ -7,26 +7,36 @@
   .col-md-10
     .row
       .col-md-4
-        Email:
+        %p
+          Email:
       .col-md-8
         %p
           = @user.email
     .row
       .col-md-4
-        Prospects left:
-      .col-md-8
         %p
-          = @user.calls_left
+          Prospects left:
+      .col-md-8
+        .row
+          .col-md-1
+            %p
+              = @user.calls_left
+          .col-md-1
+            %p
+              = link_to 'Add more credits', edit_user_path(@user), class: 'btn btn-info btn-xs'
+          .col-md-10
     - if @user.plan.present?
       .row
         .col-md-4
-          Current plan:
+          %p
+            Current plan:
         .col-md-8
           %p
             = @user.plan
     .row
       .col-md-4
-        Subscription is valid till:
+        %p
+          Subscription is valid till:
       .col-md-8
         %p
           = @user.subscription_expires.nil? ? Time.now.to_formatted_s(:short) : @user.subscription_expires.to_formatted_s(:short)
@@ -133,13 +143,13 @@
             = fa_icon 'download'
           = link_to new_campaign_path, class: 'btn btn-default', id: 'new_campaign' do
             Create new campaign
-            = fa_icon 'download'
+            = fa_icon 'send'
 
 
         - if @user.profiles_with_hidden_emails.size > 0
           = link_to '#reveal', class: 'btn btn-info', id: 'reveal', data: reveal_emails_users_path do
             Reveal emails
-            = fa_icon 'download'
+            = fa_icon 'search'
       -else
         = link_to edit_user_path(@user), class: 'btn btn-info' do
           Choose subscription plan to download prospects

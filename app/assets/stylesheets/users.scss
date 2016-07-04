@@ -2,11 +2,11 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .plan {
-  padding: 20px;
-  margin: 5px;
-  border-radius: 3px;
-  border: none;
-  color: white;
+  //padding: 20px;
+  //margin: 5px;
+  border-right: 1px solid darkgray;
+  line-height: 1.5;
+  //color: white;
 }
 
 .btn-plan{
@@ -25,4 +25,53 @@ button h4{
 }
 .special{
   background-color: #c0a16b;
+}
+
+.font-44{
+  font-size: 44px;
+}
+.font-20{
+  font-size: 20px;
+}
+
+.month{
+  opacity: 0.5;
+  font-size: 18px;
+}
+
+.money{
+  vertical-align: top;
+  position: relative;
+  top: 10px;
+  font-size: 22px;
+  //margin-right: 10px
+}
+
+.plan ul{
+  list-style: none;
+  line-height: 28px;
+}
+
+.plan li{
+  color: #444;
+}
+
+.plan i{
+  color: #38c994;
+}
+
+.plan i.social{
+  color: #555;
+}
+
+.body{
+  max-width: 1124px;
+  padding-bottom: 50px;
+}
+
+.qa{
+  line-height: 2.0;
+  p {
+    padding-bottom: 10px;
+  }
 }

@@ -1,111 +1,287 @@
-.row
-  .col-md-3
-    .plan.beginner
-      %h4.text-center Beginner
-      %ul
-        %li
-          %p.large
-            %strong $39 Monthly per user
-        %li
-          %p.large 80 prospects
-        %li
-          %p.large
-            \~
-            48¢ per contact
-        %li
-          %p.large Enrich leads
-        %li
-          %p.large Add Excel sheets
-        %li
-          %p.large Access to Essential Guidelines
-    %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
-      %input{name: 'sid', type: 'hidden', value: '202864835'}
-      %input{name: 'mode', type: 'hidden', value: '2CO'}
-      %input{name: 'li_0_type', type: 'hidden', value: 'product'}
-      %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
-      %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
-      %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
-      %input{name: 'li_0_price', type: 'hidden', value: '39.00'}
-      %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
-      %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
-      %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+.body.center-block
+  .row
+    .col-md-12
+      %h2
+        Plans & Pricing
+  .row
+    .col-md-12
+      .row
+        .col-md-3
+          .plan
+            .newbie
+              %h4
+                Newbie
+              %p
+                Good place to start
+              .font-44
+                Free
+              %p
+                We provide you with
+                %span.font-20
+                  10
+                free credits to get yourself familiar with the powerful tool that we offer
+        .col-md-3
+          .plan
+            .newbie
+              %h4
+                Light
+              %p
+                Best plan for one time campaign
+              .font-44
+                %span.money $
+                %span.amount 39
+                %cite.month
+                  \/mo
+              .ul
+                %ul.list-unstyled
+                  %li
+                    80 Prospects
+                  %li
+                    3 Email Campaigns
+                  %li
+                    \~
+                    48¢ per Contact
+                  %li
+                    = fa_icon 'linkedin', class: 'social'
+                    Linkedin Search and Profiles
+                  %li
+                    = fa_icon 'check'
+                    Enrich Leads
+                  %li
+                    = fa_icon 'check'
+                    Export prospects
+                  %li
+                    = fa_icon 'check'
+                    Unlimited Email Templates
+              = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning'
+        .col-md-3
+          .plan
+            .newbie
+              %h4
+                Standard
+              %p
+                For small and medium sales teams
+              .font-44
+                %span.money $
+                %span.amount 99
+                %cite.month
+                  \/mo
+              .ul
+                %ul.list-unstyled
+                  %li
+                    250 Prospects
+                  %li
+                    15 Email Campaigns
+                  %li
+                    \~
+                    39¢ per Contact
+                  %li
+                    = fa_icon 'linkedin', class: 'social'
+                    Linkedin Search and Profiles
+                  %li
+                    = fa_icon 'twitter', class: 'social'
+                    Twitter Profiles
+                  %li
+                    = fa_icon 'check'
+                    Enrich Leads
+                  %li
+                    = fa_icon 'check'
+                    Export prospects
+                  %li
+                    = fa_icon 'check'
+                    Unlimited Email Templates
+              = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning'
+        .col-md-3
+          .plan
+            .newbie
+              %h4
+                Advanced
+              %p
+                Special needs
+              .font-44
+                %span.money $
+                %span.amount 279
+                %cite.month
+                  \/mo
+              .ul
+                %ul.list-unstyled
+                  %li
+                    2000 Prospects
+                  %li
+                    Unlimited Email Campaigns
+                  %li
+                    \~
+                    14¢ per Contact
+                  %li
+                    = fa_icon 'linkedin', class: 'social'
+                    Linkedin Search and Profiles
+                  %li
+                    = fa_icon 'twitter', class: 'social'
+                    Twitter Profiles
+                  %li
+                    = fa_icon 'facebook', class: 'social'
+                    Facebook Profiles
+                  %li
+                    = fa_icon 'check'
+                    Enrich Leads
+                  %li
+                    = fa_icon 'check'
+                    Export prospects
+                  %li
+                    = fa_icon 'check'
+                    Unlimited Email Templates
+              = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning'
+  .row
+    .col-md-12
+      %p.text-muted
+        Don't worry, you can upgrade, downgrade or cancel your plan at any time
+  .row
+    .col-md-12
+      %h3
+        Questions and answers
+  .row.qa
+    .col-md-6
+      %h4
+        How many prospects do I need?
+      %p
+        We would recommend you to start with
+        %cite
+          Light Plan
+        and upgrade it step by step once you have need. Upgrade action will take effect immediately,
+        while downgrade and cancel actions will be effective at the end of the billing period.
+      %h4
+        Can I change plans or cancel my account later?
+      %p
+        Of course. You can upgrade, downgrade, or cancel your account at any time via your “Account” page.
+      %h4
+        What about contracts or hidden charges?
+      %p
+        We don’t have any contracts so there’s no long-term commitment. You can cancel your subscription any time. And we don’t have any hidden charges whatsoever.
+    .col-md-6
+      %h4
+        What types of payment do you accept?
+      %p
+        We accept all major credit cards including Visa and Mastercard. Also, we accept PayPal. Contact us to pay via Wire Transfer, Check or Money Order as well as Purchase Order.
+      %h4
+        Still have a question?
+      %p
+        Shoot us an emailto
+        = mail_to 'team@trendom.io'
+        = fa_icon 'envelope-o'
+      %p
+        We are ready to help. Really.
 
-      %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
-      %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
-      %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
-      %input{name: 'city', type: 'hidden', value: @user.city}/
-      %input{name: 'state', type: 'hidden', value: @user.state}/
-      %input{name: 'zip', type: 'hidden', value: '43228'}/
-      %input{name: 'country', type: 'hidden', value: @user.country}/
-      %input{name: 'email', type: 'hidden', value: @user.billing_email}/
-      %input{name: 'phone', type: 'hidden', value: @user.phone}/
-      %button.btn.btn-block.beginner{name: 'submit', type: 'submit', value: 'Choose advanced'}
-        %h4.text-center Choose beginner
-
-  .col-md-3
-    .plan.advanced
-      %h4.text-center Advanced
-      %ul
-        %li
-          %p.large
-            %strong $99 Monthly per user
-        %li
-          %p.large 250 prospects
-        %li
-          %p.large
-            \~
-            39¢ per contact
-        %li
-          %p.large Enrich leads
-        %li
-          %p.large Add Excel and Google sheets
-        %li
-          %p.large Access to Full Guidelines
-
-    %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
-      %input{name: 'sid', type: 'hidden', value: '202864835'}
-      %input{name: 'mode', type: 'hidden', value: '2CO'}
-      %input{name: 'li_0_type', type: 'hidden', value: 'product'}
-      %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
-      %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
-      %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
-      %input{name: 'li_0_price', type: 'hidden', value: '99.00'}
-      %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
-      %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
-      %input{name: 'currency_code', type: 'hidden', value: 'USD'}
-
-      %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
-      %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
-      %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
-      %input{name: 'city', type: 'hidden', value: @user.city}/
-      %input{name: 'state', type: 'hidden', value: @user.state}/
-      %input{name: 'zip', type: 'hidden', value: '43228'}/
-      %input{name: 'country', type: 'hidden', value: @user.country}/
-      %input{name: 'email', type: 'hidden', value: @user.billing_email}/
-      %input{name: 'phone', type: 'hidden', value: @user.phone}/
-      %button.btn.btn-block.advanced{name: 'submit', type: 'submit', value: 'Choose advanced'}
-        %h4.text-center Choose advanced
-
-  .col-md-3
-    .plan.special
-      %h4.text-center Special
-      %ul
-        %li
-          %p.large Mass emails
-        %li
-          %p.large CRM integration
-        %li
-          %p.large Scheduled prospects delivery
-        %li
-          %p.large Particular site with emails
-        %li
-          %p.large You need special quotation
-        %li
-          %p.large Any customization
-    %a{href: 'mailto:team@trendom.io', role: 'button'}
-      %button.btn.btn-block.special{href: 'mailto:team@trendom.io', :name => 'submit', :type => 'submit', :value => 'Choose advanced'}
-        %h4.text-center Contact us
-
-
-
-%script{src: 'https://www.2checkout.com/static/checkout/javascript/direct.min.js'}
+  .row
+    .col-md-12
+      %h4
+        Payment methods
+      =image_tag 'paymentmethods.jpg'
+  -#.row
+  -#  .col-md-4
+  -#    .beginner
+  -#      %h4 Beginner
+  -#      %ul
+  -#        %li
+  -#          %strong $39 Monthly per user
+  -#        %li
+  -#          %p 80 prospects
+  -#        %li
+  -#          \~
+  -#          48¢ per contact
+  -#        %li
+  -#          Enrich leads
+  -#        %li
+  -#          Add Excel sheets
+  -#        %li
+  -#          Access to Essential Guidelines
+  -#    %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+  -#      %input{name: 'sid', type: 'hidden', value: '202864835'}
+  -#      %input{name: 'mode', type: 'hidden', value: '2CO'}
+  -#      %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+  -#      %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+  -#      %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+  -#      %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+  -#      %input{name: 'li_0_price', type: 'hidden', value: '39.00'}
+  -#      %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+  -#      %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+  -#      %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+  -#
+  -#      %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+  -#      %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+  -#      %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+  -#      %input{name: 'city', type: 'hidden', value: @user.city}/
+  -#      %input{name: 'state', type: 'hidden', value: @user.state}/
+  -#      %input{name: 'zip', type: 'hidden', value: '43228'}/
+  -#      %input{name: 'country', type: 'hidden', value: @user.country}/
+  -#      %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+  -#      %input{name: 'phone', type: 'hidden', value: @user.phone}/
+  -#      %button.btn.btn-block.beginner{name: 'submit', type: 'submit', value: 'Choose advanced'}
+  -#        %h4.text-center Choose beginner
+  -#
+  -#  .col-md-4
+  -#    .advanced
+  -#      %h4.text-center Advanced
+  -#      %ul
+  -#        %li
+  -#          %p.large
+  -#            %strong $99 Monthly per user
+  -#        %li
+  -#          %p.large 250 prospects
+  -#        %li
+  -#          %p.large
+  -#            \~
+  -#            39¢ per contact
+  -#        %li
+  -#          %p.large Enrich leads
+  -#        %li
+  -#          %p.large Add Excel and Google sheets
+  -#        %li
+  -#          %p.large Access to Full Guidelines
+  -#
+  -#    %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+  -#      %input{name: 'sid', type: 'hidden', value: '202864835'}
+  -#      %input{name: 'mode', type: 'hidden', value: '2CO'}
+  -#      %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+  -#      %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+  -#      %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+  -#      %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+  -#      %input{name: 'li_0_price', type: 'hidden', value: '99.00'}
+  -#      %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+  -#      %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+  -#      %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+  -#
+  -#      %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+  -#      %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+  -#      %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+  -#      %input{name: 'city', type: 'hidden', value: @user.city}/
+  -#      %input{name: 'state', type: 'hidden', value: @user.state}/
+  -#      %input{name: 'zip', type: 'hidden', value: '43228'}/
+  -#      %input{name: 'country', type: 'hidden', value: @user.country}/
+  -#      %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+  -#      %input{name: 'phone', type: 'hidden', value: @user.phone}/
+  -#      %button.btn.btn-block.advanced{name: 'submit', type: 'submit', value: 'Choose advanced'}
+  -#        %h4.text-center Choose advanced
+  -#
+  -#  .col-md-4
+  -#    -#.plan.special
+  -#    -#  %h4.text-center Special
+  -#    -#  %ul
+  -#    -#    %li
+  -#    -#      %p.large Mass emails
+  -#    -#    %li
+  -#    -#      %p.large CRM integration
+  -#    -#    %li
+  -#    -#      %p.large Scheduled prospects delivery
+  -#    -#    %li
+  -#    -#      %p.large Particular site with emails
+  -#    -#    %li
+  -#    -#      %p.large You need special quotation
+  -#    -#    %li
+  -#    -#      %p.large Any customization
+  -#    -#%a{href: 'mailto:team@trendom.io', role: 'button'}
+  -#    -#  %button.btn.btn-block.special{href: 'mailto:team@trendom.io', :name => 'submit', :type => 'submit', :value => 'Choose advanced'}
+  -#    -#    %h4.text-center Contact us
+  -#
+  -#
+  -#
+  -#%script{src: 'https://www.2checkout.com/static/checkout/javascript/direct.min.js'}
