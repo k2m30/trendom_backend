@@ -41,8 +41,8 @@ task :setup => :environment do
   queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml' and 'secrets.yml'."]
 
-  queue! %[ln -s /var/log/nginx/error.log.1 "#{deploy_to}/#{shared_path}/log/nginx_error.log"]
-  queue! %[ln -s /var/log/nginx/access.log.1 "#{deploy_to}/#{shared_path}/log/nginx_access.log"]
+  queue! %[ln -s /var/log/nginx/error.log "#{deploy_to}/#{shared_path}/log/nginx_error.log"]
+  queue! %[ln -s /var/log/nginx/access.log "#{deploy_to}/#{shared_path}/log/nginx_access.log"]
 
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
@@ -62,14 +62,14 @@ task :deploy => :environment do
     # Put things to run locally before ssh
   end
   deploy do
-    # Put things that will set up an empty directory into a fully set-up
-    # instance of your project.
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
+
+    queue! "ln -s #{deploy_to}/#{current_path}/config/nginx/trendom.conf /etc/nginx/sites-enabled/trendom.conf"
 
     to :launch do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
@@ -79,9 +79,15 @@ task :deploy => :environment do
 end
 
 task :cold_start => :environment do
-  queue! "RAILS_ENV=production COUNT=5 QUEUE=* #{deploy_to}/#{current_path}/bin/rake resque:work"
+  queue! "cd #{deploy_to}/#{current_path}"
+  queue! "PIDFILE=#{deploy_to}/#{shared_path}/resque.pid COUNT=5 RAILS_ENV=production BACKGROUND=yes QUEUE=* rake environment resque:work"
   invoke :restart_nginx
-  queue! "puma"
+  invoke :start
+end
+
+task :start => :environment do
+  queue! "cd #{deploy_to}/#{current_path}"
+  queue! 'puma -C config/puma/production.rb'
 end
 
 task :restart => :environment do
