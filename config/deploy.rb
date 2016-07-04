@@ -43,6 +43,8 @@ task :setup => :environment do
 
   queue! %[ln -s /var/log/nginx/error.log "#{deploy_to}/#{shared_path}/log/nginx_error.log"]
   queue! %[ln -s /var/log/nginx/access.log "#{deploy_to}/#{shared_path}/log/nginx_access.log"]
+  queue! %[ln -s "#{deploy_to}/#{current_path}"]
+  queue! %[ln -s "#{deploy_to}/#{shared_path}/log"]
 
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
@@ -56,7 +58,7 @@ task :setup => :environment do
   end
 end
 
-desc "Deploys the current version to the server."
+desc 'Deploys the current version to the server.'
 task :deploy => :environment do
   to :before_hook do
     # Put things to run locally before ssh
@@ -68,7 +70,7 @@ task :deploy => :environment do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-    queue! "rm /etc/nginx/sites-enabled/trendom.conf"
+    queue! 'rm /etc/nginx/sites-enabled/trendom.conf'
     queue! "ln -s #{deploy_to}/#{current_path}/config/nginx/trendom.conf /etc/nginx/sites-enabled/trendom.conf"
 
     to :launch do
