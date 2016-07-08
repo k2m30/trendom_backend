@@ -23,6 +23,11 @@ class UsersController < ApplicationController
   def choose_plan
   end
 
+  def cancel_subscription
+    @user.cancel_subscription
+    redirect_to choose_plan_users_path
+  end
+
   def remove_profile
     profile = Profile.find(params[:id])
     @user.profiles.delete(profile) unless profile.nil?

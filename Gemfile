@@ -33,7 +33,7 @@ gem 'tail'
 gem 'gmail'
 gem 'email_verifier', require: false
 gem 'google_custom_search_api'
-# gem 'doorkeeper'
+gem 'twocheckout'
 
 group :development do
   gem 'better_errors'

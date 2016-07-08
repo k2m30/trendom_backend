@@ -57,7 +57,11 @@
               %li
                 =link_to 'Email templates', email_templates_path
               %li
-                =link_to 'Account'
+                =link_to do
+                  Account
+                  %span.badge
+                    =current_user.calls_left
+                    credits
             %ul.nav.navbar-nav.navbar-right
               %li
                 =link_to destroy_user_session_path, method: :delete do

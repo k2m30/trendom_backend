@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
 
   def active?
     active = (calls_left > 0 and Time.now < subscription_expires)
-    update(calls_left: 0, plan: '') unless active
+    update(plan: 'Free') unless active
     active
   end
 
@@ -50,11 +50,13 @@ class User < ActiveRecord::Base
       next_payment = subscription_expires.nil? ? Time.now + 1.month : subscription_expires + 1.month
       case params['li_0_price'].to_f
         when 9.0
-          self.update(plan: '', subscription_expires: next_payment, calls_left: 0)
+          self.update(plan: 'Free', subscription_expires: next_payment, calls_left: 10, sale_id: params['sale_id'])
         when 39.0
-          self.update(plan: 'Basic', subscription_expires: next_payment, calls_left: calls_left + 80)
+          self.update(plan: 'Light', subscription_expires: next_payment, calls_left: calls_left + 80)
         when 99.0
-          self.update(plan: 'Advanced', subscription_expires: next_payment, calls_left: calls_left + 250)
+          self.update(plan: 'Standard', subscription_expires: next_payment, calls_left: calls_left + 250)
+        when 279.0
+          self.update(plan: 'Advanced', subscription_expires: next_payment, calls_left: calls_left + 2000)
       end
       return true
     end
@@ -94,7 +96,10 @@ class User < ActiveRecord::Base
                          email: data[:email],
                          password: Devise.friendly_token[0, 20],
                          image: data[:image],
-                         uid: access_token[:uid])
+                         calls_left: 10,
+                         plan: 'Free',
+                         uid: access_token[:uid],
+                         subscription_expires: Time.now)
     end
     user.update_with_omniauth(access_token) if user.image.nil?
     user.update(tkn: access_token.credentials.token, expires_at: access_token.credentials.expires_at)
@@ -130,6 +135,28 @@ class User < ActiveRecord::Base
         csv << profile.attributes.values_at(*columns)
       end
     end
+  end
+
+  def cancel_subscription
+    Twocheckout::API.credentials = {
+        :username => 'APIuser1817037',
+        :password => 'APIpass1817037',
+        # :sandbox => 1   #Uncomment to use Sandbox
+    }
+
+    begin
+      sale = Twocheckout::Sale.find(sale_id: sale_id)
+      last_invoice = sale.invoices.last
+      last_lineitem = last_invoice.lineitems.last
+      last_lineitem.stop_recurring!
+      self.update(plan: 'Free')
+    rescue Exception => e
+      puts e.message
+    end
+  end
+
+  def plan?(p)
+    plan.downcase == p.downcase
   end
 
   protected

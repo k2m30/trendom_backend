@@ -20,6 +20,10 @@
                 %span.font-20
                   10
                 free credits to get yourself familiar with the powerful tool that we offer
+
+              -if @user.plan?('Free')
+                %h5 Your current plan
+
         .col-md-3
           .plan
             .newbie
@@ -53,7 +57,26 @@
                   %li
                     = fa_icon 'check'
                     Unlimited Email Templates
-              = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning'
+
+              -if @user.plan?('Light')
+                .dropdown
+                  %button#dropdown.btn.btn-default.btn-sm.dropdown-toggle{'aria-expanded': true, 'aria-haspopup': true, 'data-toggle': 'dropdown', type: 'button'}
+                    Your current plan
+                    %span.caret
+                  %ul.dropdown-menu{'aria-labelledby': 'dropdown'}
+                    %li
+                      %a
+                        Next payment
+                        = @user.subscription_expires.to_formatted_s(:short)
+                    %li
+                      %a
+                        = @user.calls_left
+                        Credits left
+                    %li.divider{role: 'separator'}
+                    %li
+                      %a{href: cancel_subscription_users_path} Cancel subscription
+              -else
+                = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning choice'
         .col-md-3
           .plan
             .newbie
@@ -90,7 +113,11 @@
                   %li
                     = fa_icon 'check'
                     Unlimited Email Templates
-              = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning'
+              -if @user.plan?('Standard')
+                %h5 Your current plan
+              -else
+                = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning choice'
+
         .col-md-3
           .plan
             .newbie
@@ -130,7 +157,11 @@
                   %li
                     = fa_icon 'check'
                     Unlimited Email Templates
-              = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning'
+              -if @user.plan?('Advanced')
+                %h5 Your current plan
+              -else
+                = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning choice'
+
   .row
     .col-md-12
       %p.text-muted
@@ -165,7 +196,7 @@
       %h4
         Still have a question?
       %p
-        Shoot us an emailto
+        Shoot us an email to
         = mail_to 'team@trendom.io'
         = fa_icon 'envelope-o'
       %p

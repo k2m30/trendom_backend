@@ -15,7 +15,7 @@ class EmailChecker
     domain_options.each do |domain|
       @mx_servers = list_mxs domain
       @domain = domain
-      break unless @mx_servers.empty?
+      @mx_servers.empty? ? next : break
     end
 
     raise NoMailServerException.new("No mail server for #{domain_options}") if @mx_servers.empty?
@@ -33,6 +33,7 @@ class EmailChecker
       connect
       if verify(e)
         email = e
+        close_connection
         break
       end
       close_connection
@@ -49,7 +50,7 @@ class EmailChecker
     end
     mxs.sort_by { |mx| mx[:priority] }
   rescue Dnsruby::NXDomain
-    raise NoMailServerException.new("#{domain} does not exist")
+    return []
   end
 
   def is_connected

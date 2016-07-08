@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get 'download'
       get 'progress'
       get 'reveal_emails'
+      get 'cancel_subscription'
     end
   end
 

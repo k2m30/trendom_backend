@@ -91,7 +91,8 @@ class Profile < ActiveRecord::Base
       email_options = %W(#{first}.#{last} #{first[0]}#{last} #{first} #{last}).map(&:downcase)
 
 
-      email = EmailChecker.new(domain_options, email_options).find_right_email
+      checker = EmailChecker.new(domain_options, email_options)
+      email = checker.find_right_email
 
       if email
         update(emails: [email]) if update
