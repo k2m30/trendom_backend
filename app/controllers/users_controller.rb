@@ -10,11 +10,6 @@ class UsersController < ApplicationController
   def edit
   end
 
-  def test
-    sleep 1
-    render plain: '1'
-  end
-
   def update
     @user.update!(user_params)
     redirect_to choose_plan_users_path
