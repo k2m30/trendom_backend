@@ -126,7 +126,7 @@ class Profile < ActiveRecord::Base
         (ids - profiles.pluck(:linkedin_id)).each do |id|
           thread = Thread.new do
             p = request[id]
-            emails_available = PiplDb.emails_available(name: p.name, account_id: "#{p.id}@linkedin".freeze) #|| FullContactDb.find(params)
+            emails_available = PiplDb.emails_available(name: p.name, account_id: "#{p.id}@linkedin".freeze)
             hash[p.id] = emails_available
 
             new_profiles << {linkedin_id: p.id, linkedin_url: "https://www.linkedin.com/profile/view?id=#{p.public_id}".freeze,

@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
     request = UserRequest.new(params)
     case request.source
       when :linkedin
-        profiles = Profile.where(linkedin_id: [request.ids])
+        profiles = Profile.where(linkedin_id: request.ids)
         profiles.each do |profile|
           self.profiles << profile unless self.profiles.include?(profile)
         end
