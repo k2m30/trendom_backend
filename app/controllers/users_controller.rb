@@ -53,7 +53,6 @@ class UsersController < ApplicationController
   end
 
   def progress
-    # sleep 1
     render text: current_user.progress.round(2)
   end
 
