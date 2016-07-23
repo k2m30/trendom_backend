@@ -76,7 +76,30 @@
                     %li
                       %a{href: cancel_subscription_users_path} Cancel subscription
               -else
-                = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning choice'
+                %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+                  %input{name: 'sid', type: 'hidden', value: '202864835'}
+                  %input{name: 'mode', type: 'hidden', value: '2CO'}
+                  %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+                  %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+                  %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+                  %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+                  %input{name: 'li_0_price', type: 'hidden', value: '39.00'}
+                  %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+                  %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+                  %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+
+                  %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+                  %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+                  %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+                  %input{name: 'city', type: 'hidden', value: @user.city}/
+                  %input{name: 'state', type: 'hidden', value: @user.state}/
+                  %input{name: 'zip', type: 'hidden', value: '43228'}/
+                  %input{name: 'country', type: 'hidden', value: @user.country}/
+                  %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+                  %input{name: 'phone', type: 'hidden', value: @user.phone}/
+                  %button.btn.btn-sm.btn-warning.choice{name: 'submit', type: 'submit', value: 'Choose light'}
+                    Choose Light
+
         .col-md-3
           .plan
             .newbie
@@ -116,7 +139,29 @@
               -if @user.plan?('Standard')
                 %h5 Your current plan
               -else
-                = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning choice'
+                %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+                  %input{name: 'sid', type: 'hidden', value: '202864835'}
+                  %input{name: 'mode', type: 'hidden', value: '2CO'}
+                  %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+                  %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+                  %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+                  %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+                  %input{name: 'li_0_price', type: 'hidden', value: '99.00'}
+                  %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+                  %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+                  %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+
+                  %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+                  %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+                  %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+                  %input{name: 'city', type: 'hidden', value: @user.city}/
+                  %input{name: 'state', type: 'hidden', value: @user.state}/
+                  %input{name: 'zip', type: 'hidden', value: '43228'}/
+                  %input{name: 'country', type: 'hidden', value: @user.country}/
+                  %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+                  %input{name: 'phone', type: 'hidden', value: @user.phone}/
+                  %button.btn.btn-sm.btn-warning.choice{name: 'submit', type: 'submit', value: 'Choose standard'}
+                    Choose Standard
 
         .col-md-3
           .plan
@@ -160,7 +205,30 @@
               -if @user.plan?('Advanced')
                 %h5 Your current plan
               -else
-                = link_to 'Upgrade', '#', class: 'btn btn-sm btn-warning choice'
+                %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+                  %input{name: 'sid', type: 'hidden', value: '202864835'}
+                  %input{name: 'mode', type: 'hidden', value: '2CO'}
+                  %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+                  %input{name: 'li_0_name', type: 'hidden', value: 'Advanced plan subscription'}
+                  %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+                  %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+                  %input{name: 'li_0_price', type: 'hidden', value: '279.00'}
+                  %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+                  %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+                  %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+
+                  %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+                  %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+                  %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+                  %input{name: 'city', type: 'hidden', value: @user.city}/
+                  %input{name: 'state', type: 'hidden', value: @user.state}/
+                  %input{name: 'zip', type: 'hidden', value: '43228'}/
+                  %input{name: 'country', type: 'hidden', value: @user.country}/
+                  %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+                  %input{name: 'phone', type: 'hidden', value: @user.phone}/
+                  %button.btn.btn-sm.btn-warning.choice{name: 'submit', type: 'submit', value: 'Choose standard'}
+                    Choose Advanced
+
 
   .row
     .col-md-12
@@ -315,4 +383,4 @@
   -#
   -#
   -#
-  -#%script{src: 'https://www.2checkout.com/static/checkout/javascript/direct.min.js'}
+  %script{src: 'https://www.2checkout.com/static/checkout/javascript/direct.min.js'}

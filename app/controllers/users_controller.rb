@@ -46,7 +46,9 @@ class UsersController < ApplicationController
       render nothing: true, status: :unauthorized
     else
       @user.add_profiles(params)
-      render nothing: true, status: :ok
+      hash[:status] = {}
+      hash[:status][:calls_left] = @user.calls_left
+      render json: hash.to_json
     end
   end
 

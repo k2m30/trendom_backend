@@ -49,8 +49,6 @@ class User < ActiveRecord::Base
     if params['sid'].to_i == 202864835 and params['li_0_uid'] == uid
       next_payment = subscription_expires.nil? ? Time.now + 1.month : subscription_expires + 1.month
       case params['li_0_price'].to_f
-        when 9.0
-          self.update(plan: 'Free', subscription_expires: next_payment, calls_left: 10, sale_id: params['sale_id'])
         when 39.0
           self.update(plan: 'Light', subscription_expires: next_payment, calls_left: calls_left + 80)
         when 99.0
@@ -78,6 +76,7 @@ class User < ActiveRecord::Base
       when :facebook
       when :twitter
     end
+    reveal_emails
     self.save if changed?
   end
 
