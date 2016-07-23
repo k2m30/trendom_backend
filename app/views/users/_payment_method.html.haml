@@ -1,0 +1,41 @@
+-if @user.plan?(plan)
+  .dropdown
+    %button#dropdown.btn.btn-default.btn-sm.dropdown-toggle{'aria-expanded': true, 'aria-haspopup': true, 'data-toggle': 'dropdown', type: 'button'}
+      Your current plan
+      %span.caret
+    %ul.dropdown-menu{'aria-labelledby': 'dropdown'}
+      %li
+        %a
+          Next payment
+          = @user.subscription_expires.to_formatted_s(:short)
+      %li
+        %a
+          = @user.calls_left
+          Credits left
+      %li.divider{role: 'separator'}
+      %li
+        %a{href: cancel_subscription_users_path} Cancel subscription
+-else
+  %form{action: 'https://www.2checkout.com/checkout/purchase', method: :post}
+    %input{name: 'sid', type: 'hidden', value: '202864835'}
+    %input{name: 'mode', type: 'hidden', value: '2CO'}
+    %input{name: 'li_0_type', type: 'hidden', value: 'product'}
+    %input{name: 'li_0_name', type: 'hidden', value: "Trendom.io / #{plan} plan subscription"}
+    %input{name: 'li_0_uid', type: 'hidden', value: @user.uid}
+    %input{name: 'li_0_quantity', type: 'hidden', value: '1'}
+    %input{name: 'li_0_price', type: 'hidden', value: price}
+    %input{name: 'li_0_recurrence', type: 'hidden', value: '1 Month'}
+    %input{name: 'li_0_tangible', type: 'hidden', value: 'N'}
+    %input{name: 'currency_code', type: 'hidden', value: 'USD'}
+
+    %input{name: 'card_holder_name', type: 'hidden', value: @user.card_holder_name}/
+    %input{name: 'street_address', type: 'hidden', value: @user.street_address}/
+    %input{name: 'street_address2', type: 'hidden', value: @user.street_address2}/
+    %input{name: 'city', type: 'hidden', value: @user.city}/
+    %input{name: 'state', type: 'hidden', value: @user.state}/
+    %input{name: 'zip', type: 'hidden', value: @user.zip}/
+    %input{name: 'country', type: 'hidden', value: @user.country}/
+    %input{name: 'email', type: 'hidden', value: @user.billing_email}/
+    %input{name: 'phone', type: 'hidden', value: @user.phone}/
+    %button.btn.btn-sm.btn-warning.choice{name: 'submit', type: 'submit', value: "Choose #{plan}"}
+      ="Choose #{plan}"
