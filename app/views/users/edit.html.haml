@@ -60,14 +60,14 @@
   .col-md-3
     =bootstrap_form_for(@user) do |f|
       = f.text_field :card_holder_name, value: @user.card_holder_name || @user.name
-      = f.text_field :street_address
-      = f.text_field :street_address2
-      = f.text_field :city
-      = f.text_field :state
-      = f.text_field :zip
+      = f.text_field :street_address, value: @user.street_address
+      = f.text_field :street_address2, value: @user.street_address2
+      = f.text_field :city, value: @user.city
+      = f.text_field :state, value: @user.state
+      = f.text_field :zip, value: @user.zip
       = f.select :country, countries_list
       = f.email_field :billing_email, label: 'Email', value: @user.billing_email || @user.email
-      = f.text_field :phone
+      = f.text_field :phone, value: @user.phone
 
       = f.submit 'Confirm user details'
   .col-md-3
