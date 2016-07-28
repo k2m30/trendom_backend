@@ -3,7 +3,10 @@ class RevealEmailJob < ActiveJob::Base
 
   def perform(user_id, profile_id, increment)
     user = User.find(user_id)
-    return if user.revealed_ids.include?(profile_id)
+    if user.revealed_ids.include?(profile_id)
+      user.update(progress: (user.progress + increment).round(2))
+      return
+    end
 
     profile = Profile.find(profile_id)
     profile.get_emails
