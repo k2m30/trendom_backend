@@ -78,12 +78,16 @@ class User < ActiveRecord::Base
     end
     reveal_emails
     self.save if changed?
+    self.reload
   end
 
   def self.create_with_uid_and_email(uid, email)
     User.create(email: email,
                 password: Devise.friendly_token[0, 20],
-                uid: uid)
+                uid: uid,
+                calls_left: 10,
+                plan: 'Free',
+                subscription_expires: Time.now)
   end
 
   def self.from_omniauth(access_token)
