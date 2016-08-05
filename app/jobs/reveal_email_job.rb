@@ -10,6 +10,9 @@ class RevealEmailJob < ActiveJob::Base
 
     profile = Profile.find(profile_id)
     profile.get_emails
-    user.update(progress: (user.progress + increment).round(2), revealed_ids: user.revealed_ids << profile_id, calls_left: user.calls_left-1)
+    profile.reload
+    update_hash = {progress: (user.progress + increment).round(2), revealed_ids: user.revealed_ids << profile_id}
+    update_hash[:calls_left] = user.calls_left-1 unless profile.emails.empty?
+    user.update(update_hash)
   end
 end

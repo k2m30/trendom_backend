@@ -41,10 +41,12 @@ class Profile < ActiveRecord::Base
   def get_emails
     return emails unless emails.empty?
 
-    get_emails_from_google
+    update(emails: ['test@test.com'])
+    return ['test@test.com']
+    # get_emails_from_google
     return emails unless emails.empty?
 
-    get_emails_from_pipl
+    # get_emails_from_pipl
     return emails
   end
 
@@ -57,6 +59,8 @@ class Profile < ActiveRecord::Base
 
     first, last = split_name
     person = PiplDb.find(first: first, last: last, account_id: account_id)
+    return [] if person.nil?
+
     notes = person.to_hash
     notes.delete(:search_pointer)
     notes.delete(:emails)
