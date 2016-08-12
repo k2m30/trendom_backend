@@ -102,10 +102,12 @@ end
 
 
 task :resque_start => :environment do
+  invoke :cd
   queue! 'rake resque:start'
 end
 
 task :resque_stop => :environment do
+  invoke :cd
   queue! 'rake resque:stop'
 end
 
