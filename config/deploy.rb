@@ -82,7 +82,7 @@ end
 
 task :cold_start => :environment do
   queue! "cd #{deploy_to}/#{current_path}"
-  queue! "PIDFILE=#{deploy_to}/#{shared_path}/resque.pid COUNT=5 RAILS_ENV=production BACKGROUND=yes QUEUE=* rake environment resque:work"
+  queue! "PIDFILE=#{deploy_to}/#{shared_path}/resque.pid COUNT=5 RAILS_ENV=production BACKGROUND=yes INTERVAL=0.1 QUEUE=* rake resque:workers --trace"
   invoke :restart_nginx
   invoke :start
 end

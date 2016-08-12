@@ -16,6 +16,7 @@ class ProfilesController < ApplicationController
       hash = Profile.get_emails_available(profiles_params)
       hash[:status] = {}
       hash[:status][:calls_left] = @user.calls_left
+      logger.debug(hash) if Rails.env.development?
       render json: hash.to_json
     end
   end

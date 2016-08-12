@@ -4,7 +4,7 @@ require_relative 'user_request'
 require 'email_verifier'
 require 'google_custom_search_api'
 
-TWO_PART_DOMAINS = %w(ac.at ac.il ac.uk aol.com apc.org asn.au att.com att.net boi.ie bp.com cmu.edu co.com co.gg co.il co.im co.in co.je co.jp co.nz co.th co.uk co.ukc co.za co.zw com.ar com.au com.bh com.br com.cn com.cy com.gt com.hk com.mk com.mt com.mx com.ng com.pk com.pt com.qa com.sg com.tr com.ua dcu.ie dsv.com edu.ge edu.in edu.tr eu.com ey.com gb.com ge.com gm.com gov.au gov.im gov.uk gt.com gwu.edu hhs.se hse.fi ibm.com ie.edu in.gov in.ua ing.com jnj.com ko.com kth.se kwe.com lls.com ltd.uk me.uk mit.edu mod.uk mps.it msn.com net.au net.il net.lb net.nz net.tr net.uk nhs.uk nyc.gov org.pl org.qa org.uk pkf.com plc.uk pwc.com rlb.com rr.com sas.com tac.com tcd.ie to.it uk.com uk.net unc.edu ups.com us.com utc.com yr.com)
+TWO_PART_DOMAINS = %w(ac.at ac.il ac.uk apc.org asn.au att.com att.net boi.ie bp.com cmu.edu co.com co.gg co.il co.im co.in co.je co.jp co.nz co.th co.uk co.ukc co.za co.zw com.ar com.au com.bh com.br com.cn com.cy com.gt com.hk com.mk com.mt com.mx com.ng com.pk com.pt com.qa com.sg com.tr com.ua dcu.ie dsv.com edu.ge edu.in edu.tr eu.com ey.com gb.com ge.com gm.com gov.au gov.im gov.uk gt.com gwu.edu hhs.se hse.fi ibm.com ie.edu in.gov in.ua ing.com jnj.com ko.com kth.se kwe.com lls.com ltd.uk me.uk mit.edu mod.uk mps.it msn.com net.au net.il net.lb net.nz net.tr net.uk nhs.uk nyc.gov org.pl org.qa org.uk pkf.com plc.uk pwc.com rlb.com rr.com sas.com tac.com tcd.ie to.it uk.com uk.net unc.edu ups.com us.com utc.com yr.com)
 
 
 class Profile < ActiveRecord::Base
@@ -41,12 +41,15 @@ class Profile < ActiveRecord::Base
   def get_emails
     return emails unless emails.empty?
 
-    update(emails: ['test@test.com'])
-    return ['test@test.com']
-    # get_emails_from_google
+    if Rails.env.development?
+      update(emails: ['test@test.com'])
+      return ['test@test.com']
+    end
+
+    get_emails_from_google
     return emails unless emails.empty?
 
-    # get_emails_from_pipl
+    get_emails_from_pipl
     return emails
   end
 
@@ -124,8 +127,6 @@ class Profile < ActiveRecord::Base
     case request.source
       when :linkedin
         profiles = Profile.where(linkedin_id: ids)
-
-        # profiles.each { |profile| hash[profile.linkedin_id] = profile.emails_available }
         hash = profiles.pluck(:linkedin_id, :emails_available).to_h
         (ids - profiles.pluck(:linkedin_id)).each do |id|
           thread = Thread.new do
@@ -153,7 +154,6 @@ class Profile < ActiveRecord::Base
     new_profiles.each do |profile_hash|
       Profile.create profile_hash
     end
-    logger.warn hash
     hash
   end
 

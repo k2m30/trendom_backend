@@ -3,16 +3,23 @@ class RevealEmailJob < ActiveJob::Base
 
   def perform(user_id, profile_id, increment)
     user = User.find(user_id)
+
+    if user.calls_left.zero?
+      return
+    end
+
     if user.revealed_ids.include?(profile_id)
-      user.update(progress: (user.progress + increment).round(2))
+      sql = "UPDATE users SET progress = progress + #{increment} WHERE id = #{user_id};"
+      ActiveRecord::Base.connection.execute(sql)
       return
     end
 
     profile = Profile.find(profile_id)
-    profile.get_emails
-    profile.reload
-    update_hash = {progress: (user.progress + increment).round(2), revealed_ids: user.revealed_ids << profile_id}
-    update_hash[:calls_left] = user.calls_left-1 unless profile.emails.empty?
-    user.update(update_hash)
+    profile.with_lock do
+      profile.get_emails
+    end
+
+    sql = "UPDATE users SET calls_left = calls_left - 1, progress = progress + #{increment}, revealed_ids = regexp_replace(revealed_ids, ' \\[\\]', '') || '- #{profile_id}\n' WHERE id = #{user_id};"
+    ActiveRecord::Base.connection.execute(sql)
   end
 end

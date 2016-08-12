@@ -123,11 +123,12 @@ class User < ActiveRecord::Base
     self.update(progress: 0.0) #if hidden_emails_size > 0
     profiles_with_hidden_emails[0..work_size-1].each do |profile|
       if Rails.env.test?
-        RevealEmailJob.set(queue: :test).perform_now(id, profile.id, 1/work_size.to_f*100.0)
+        RevealEmailJob.set(queue: :test).perform_now(id, profile.id, (1/work_size.to_f*100.0).round(2))
       else
-        RevealEmailJob.set(queue: name.to_sym).perform_later(id, profile.id, 1/work_size.to_f*100.0)
+        RevealEmailJob.set(queue: name.to_sym).perform_later(id, profile.id, (1/work_size.to_f*100.0).round(2))
       end
     end
+    work_size
   end
 
   def export_profiles(options = {})
@@ -137,24 +138,6 @@ class User < ActiveRecord::Base
       profiles_with_revealed_emails.each do |profile|
         csv << profile.attributes.values_at(*columns)
       end
-    end
-  end
-
-  def cancel_subscription
-    Twocheckout::API.credentials = {
-        :username => 'APIuser1817037',
-        :password => 'APIpass1817037',
-        # :sandbox => 1   #Uncomment to use Sandbox
-    }
-
-    begin
-      sale = Twocheckout::Sale.find(sale_id: sale_id)
-      last_invoice = sale.invoices.last
-      last_lineitem = last_invoice.lineitems.last
-      last_lineitem.stop_recurring!
-      self.update(plan: 'Free')
-    rescue Exception => e
-      puts e.message
     end
   end
 

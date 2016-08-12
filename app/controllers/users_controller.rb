@@ -35,15 +35,16 @@ class UsersController < ApplicationController
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    logger.warn params
+    # logger.warn params
 
     if @user.nil?
       render nothing: true, status: :unauthorized
     else
-      @user.add_profiles(params)
+      delta = @user.add_profiles(params)
       hash = {}
       hash[:status] = {}
-      hash[:status][:calls_left] = @user.calls_left
+      hash[:status][:calls_left] = @user.calls_left - delta
+      logger.debug(hash.to_json) if Rails.env.development?
       render json: hash.to_json
     end
   end
@@ -77,7 +78,6 @@ class UsersController < ApplicationController
       @user = User.find_by(uid: params[:uid], email: params[:email]) || User.create_with_uid_and_email(uid: params[:uid], email: params[:email])
     else
       @user = current_user
-      # @user = User.first if Rails.env.development?
     end
   end
 end
