@@ -120,6 +120,10 @@ task :cd => :environment do
   queue! "cd #{deploy_to}/#{current_path}"
 end
 
+task :reboot => :environment do
+  queue! 'sudo reboot'
+end
+
 task :puma_start => :environment do
   invoke :cd
   queue! 'puma -C config/puma/production.rb'
