@@ -75,7 +75,6 @@ task :deploy => :environment do
 
     to :launch do
       invoke :restart
-      invoke :restart_nginx
     end
   end
 end
