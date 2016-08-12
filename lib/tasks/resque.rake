@@ -3,7 +3,7 @@ require 'resque/tasks'
 task 'resque:setup' => :environment do
   ENV['QUEUE'] ||= '*'
   ENV['INTERVAL'] ||= '1'
-  ENV['RAILS_ENV'] ||= 'production'
+  ENV['ENV'] ||= 'production'
 end
 
 namespace :resque do
