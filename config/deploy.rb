@@ -81,15 +81,24 @@ task :deploy => :environment do
 end
 
 task :cold_start => :environment do
-  queue! "cd #{deploy_to}/#{current_path}"
-  queue! "PIDFILE=#{deploy_to}/#{shared_path}/resque.pid COUNT=5 RAILS_ENV=production BACKGROUND=yes INTERVAL=0.1 QUEUE=* rake resque:workers --trace"
+  invoke :cd
+  invoke :workers_start
   invoke :restart_nginx
   invoke :start
 end
 
 task :start => :environment do
-  queue! "cd #{deploy_to}/#{current_path}"
+  invoke :cd
   queue! 'puma -C config/puma/production.rb'
+end
+
+task :workers_start => :environment do
+  invoke :cd
+  queue! "COUNT=2 RAILS_ENV=production BACKGROUND=yes QUEUE=* rake resque:workers --trace"
+end
+
+task :cd => :environment do
+  queue! "cd #{deploy_to}/#{current_path}"
 end
 
 task :restart => :environment do

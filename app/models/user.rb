@@ -76,9 +76,9 @@ class User < ActiveRecord::Base
       when :facebook
       when :twitter
     end
-    reveal_emails
+    work_size = reveal_emails
     self.save if changed?
-    self.reload
+    work_size
   end
 
   def self.create_with_uid_and_email(uid, email)
