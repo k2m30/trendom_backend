@@ -103,12 +103,12 @@ end
 
 task :resque_start => :environment do
   invoke :cd
-  queue! 'rake resque:start'
+  queue! 'RAILS_ENV=production rake resque:start'
 end
 
 task :resque_stop => :environment do
   invoke :cd
-  queue! 'rake resque:stop'
+  queue! 'RAILS_ENV=production rake resque:stop'
 end
 
 task :resque_restart => :environment do
@@ -126,6 +126,7 @@ task :puma_start => :environment do
 end
 
 task :puma_stop => :environment do
+  invoke :cd
   queue! 'pumactl -P ~/puma.pid stop'
 end
 
