@@ -80,41 +80,59 @@ task :deploy => :environment do
   end
 end
 
-task :cold_start => :environment do
-  invoke :cd
-  invoke :workers_start
-  invoke :restart_nginx
-  invoke :start
-end
-
 task :start => :environment do
   invoke :cd
-  queue! 'puma -C config/puma/production.rb'
+  invoke :nginx_restart
+  invoke :puma_start
+  invoke :resque_start
 end
 
-task :workers_start => :environment do
+task :restart => :environment do
   invoke :cd
-  queue! "COUNT=2 RAILS_ENV=production BACKGROUND=yes QUEUE=* rake resque:workers --trace"
+  invoke :nginx_restart
+  invoke :puma_restart
+  invoke :resque_restart
+end
+
+task :stop => :environment do
+  invoke :cd
+  invoke :nginx_restart
+  invoke :puma_stop
+  invoke :resque_stop
+end
+
+
+task :resque_start => :environment do
+  queue! 'rake resque:start'
+end
+
+task :resque_stop => :environment do
+  queue! 'rake resque:stop'
+end
+
+task :resque_restart => :environment do
+  invoke :resque_stop
+  invoke :resque_start
 end
 
 task :cd => :environment do
   queue! "cd #{deploy_to}/#{current_path}"
 end
 
-task :restart => :environment do
-  queue! 'pumactl -P ~/puma.pid restart'
+task :puma_start => :environment do
+  invoke :cd
+  queue! 'puma -C config/puma/production.rb'
 end
 
-task :stop => :environment do
+task :puma_stop => :environment do
   queue! 'pumactl -P ~/puma.pid stop'
 end
 
-task :restart_all => :environment do
-  invoke :restart_nginx
-  invoke :restart
+task :puma_restart => :environment do
+  queue! 'pumactl -P ~/puma.pid restart'
 end
 
-task :restart_nginx => :environment do
+task :nginx_restart => :environment do
   queue! 'sudo service nginx restart'
 end
 
