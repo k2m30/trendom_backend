@@ -61,3 +61,4 @@ gem 'sanitize'
 gem 'resque'
 
 gem 'haml-rails', '~> 0.9'
+gem 'rollbar'

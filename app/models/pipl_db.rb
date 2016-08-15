@@ -21,6 +21,7 @@ class PiplDb
   private
 
   def self.get_response(person_hash, match_requirements)
+    tries = 0
     begin
       person = Pipl::Person.new
       person.add_field Pipl::Name.new(first: person_hash[:first], last: person_hash[:last])
@@ -31,7 +32,8 @@ class PiplDb
       Rails.logger.error e.message
       Rails.logger.error person_hash
       sleep rand(0.4..0.6)
-      retry
+      tries += 1
+      retry if tries < 3
     end
 
   end
