@@ -103,7 +103,7 @@ end
 
 task :resque_start => :environment do
   invoke :cd
-  queue! 'RAILS_ENV=production rake resque:start'
+  queue! 'RAILS_ENV=production rake resque:start[1]'
 end
 
 task :resque_stop => :environment do
