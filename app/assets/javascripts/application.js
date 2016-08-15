@@ -17,3 +17,4 @@
 //= require_tree .
 
 Turbolinks.enableProgressBar();
+Turbolinks.pagesCached(0);
